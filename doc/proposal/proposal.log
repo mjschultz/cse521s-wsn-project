@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2010.5.29)  22 SEP 2010 13:36
+This is pdfTeX, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2010.5.29)  22 SEP 2010 14:58
 entering extended mode
 **proposal
 (./proposal.tex
@@ -58,18 +58,18 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 (./proposal.aux)
 \openout1 = `proposal.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
 -------------------- Geometry parameters
 paper: class default
 landscape: --
@@ -109,13 +109,6 @@ driver: pdftex
 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 109.
-
- (/opt/local/share/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 109.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -125,7 +118,15 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [1{/opt/local/share/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
-] (./proposal.aux) ) 
+]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 81.
+
+(/opt/local/share/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 81.
+ [2] (./proposal.aux) ) 
 Here is how much of TeX's memory you used:
  708 strings out of 94073
  9173 string characters out of 1164797
@@ -133,13 +134,13 @@ Here is how much of TeX's memory you used:
  4058 multiletter control sequences out of 10000+50000
  4809 words of font info for 18 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 24i,10n,43p,141b,190s stack positions out of 5000i,500n,6000p,200000b,5000s
-</opt/local/share/texmf-dist/fonts/type1/bluesky/cm/cmbx12.
-pfb></opt/local/share/texmf-dist/fonts/type1/bluesky/cm/cmr12.pfb></opt/local/s
-hare/texmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb>
-Output written on proposal.pdf (1 page, 20635 bytes).
+ 24i,10n,43p,168b,244s stack positions out of 5000i,500n,6000p,200000b,5000s
+</opt/local/share/texmf-dist/fonts/type1/bluesky/cm/cmbx
+12.pfb></opt/local/share/texmf-dist/fonts/type1/bluesky/cm/cmr12.pfb></opt/loca
+l/share/texmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb>
+Output written on proposal.pdf (2 pages, 26833 bytes).
 PDF statistics:
- 18 PDF objects out of 1000 (max. 8388607)
+ 21 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
