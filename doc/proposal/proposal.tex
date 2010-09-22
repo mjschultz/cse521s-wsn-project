@@ -1,0 +1,115 @@
+% Matthew Lindsay, Patrick McBryde, Michael Schultz
+% CSE521S Project Proposal
+
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage[margin=1in]{geometry}
+
+\lhead{Matthew Lindsay, Patrick McBryde, and Michael Schultz}
+\rhead{CSE 521S: Fall 2010}
+\renewcommand{\headrulewidth}{0pt}
+\fancyheadoffset{0.5in}
+
+%\setlength{\evensidemargin}{0in}
+%\setlength{\oddsidemargin}{0in}
+%\setlength{\textwidth}{6.5in}
+%\setlength{\textheight}{9.0in}
+%\setlength{\topmargin}{-0.5in}
+%\setlength{\headheight}{0in}
+%\setlength{\headsep}{0.5in}
+%\setlength{\topsep}{0in}
+%\setlength{\itemsep}{0in}
+%\renewcommand{\baselinestretch}{1.1}
+%\newcommand{\category}[1]{ \vspace{.5in} \centerline { \bf \large \em #1 }}
+%\parskip=0.020in
+
+\begin{document}
+\centerline{\bf \large Project Proposal: }
+
+This project proposes to build parking garage monitor using a multi-hop routing
+protocol using a heterogeneous mix of sensors to track parking spot
+availability among other metrics.
+While there exist solutions to monitor parking lot utilization, they are not as
+versatile and are potentially cost prohibitive.
+Our goal is to develop an extensible system that is able to provide the same
+information using a variety of input sensors on an open platform.
+By using an open platform, our system enables us to monitor other metrics such
+as headlight, heat, or magnetic field detection with greater ease than existing
+systems.
+Also, unlike most existing solutions, our system will not require expensive
+installation and maintenance of the hardware.
+
+To achieve this, our project will use the Collection Tree Protocol (CTP) as a
+multi-hop routing method.
+This enables a single system to monitor a large area without the need to
+install costly wiring or a requirement of line-of-sight communication.
+To have a variety of detection methods, we intend to use the expansion
+connector of the TelosB/Tmote Sky sensor motes.
+By doing this we are able to swap in and out detection methods with ease.
+For example, if we used a magnetometer to detect the presence of a car and the
+sensor failed it would be easy to swap out the sensor for a new one or an
+alternative sensing mechanism.
+On the collection end, we intend to aggregate all the data into an easy to
+read/interpret interface.
+This is important because we need to present vehicle operators with a quick
+intuitive knowledge of where they should go for the quickest parking spot to
+reduce physical congestion.
+By monitoring the duration of parking space use, it would also be possible for
+a parking attendant to be notified when a person has remained in their space
+for too long.
+
+This project will require at least 4 TelosB/Tmote Sky sensor (1 for the base
+station and 3 for detection and building an non-trivial routing topology).
+We would also like a MicaZ with the MTS310CA (magnetometer) sensor board, to
+test vehicle detection with a magnetometer.
+Alternatively, if there is a way to interface a magnetometer with the
+TelosB/Tmote Sky motes we would use that in place of the MicaZ method.
+
+The breakdown of major components is: building the sensing devices/hardware,
+writing and testing the TinyOS software to handle sensing and sending of data,
+and creating a front end to present the information as needed.
+If we discover any of these components is easier than others, it is easy to
+combine forces to develop new/better methods for any of them.
+There will also be a brief focus on finding what alternatives exist and how our
+system compares to them, which we will all participate in.
+
+% - someone has to build and test the inductor loop, which seems to be less
+%   than as trivial as I thought it would be.  My attempts last night did
+%   not make any thing that detects a change in induction (I have a
+%   prototyping board with analog inputs and outputs among other things).
+%   But it shouldn't be too hard to make one (?), or a simple metal detector
+%   or something else that would detect the presence of a vehicle.  (At the
+%   very least we find something so the mote doesn't have to be under the
+%   car.)
+%
+% - someone has to build up the software to create the sensor network
+%   (probably CTP) and send the data to a base station reliably.  In theory
+%   this isn't too hard, but in practice I think it is harder than it should
+%   be (especially testing).  The motes have buttons on them that could act
+%   as the sensor input while the inductor loop doesn't exists, one press
+%   says the spot if used another says the spot is free.
+%
+% - someone has to build a front-end that displays the number of available
+%   spaces and indicates which spaces are available.  Whatever interface
+%   language is picked, it should take messages from the sensor network,
+%   know what sensors are in what state and display that information in the
+%   best way possible (as in someone driving a car needs to look at it for a
+%   split second and know where to go).
+%
+% - There is also some "related work" that can go into the project.
+%   Wikipedia has a small page on "Parking guidance and information" systems
+%   as being part of "Intelligent transportation systems."  Since the goal
+%   of these things is to cause an overall reduction in traffic congestion
+%   we could spend some time looking into what exists and is used.  A little
+%   field work to see how e.g. the Brentwook metro parking lot tracks the
+%   number of cars, the prices of such systems, etc.
+
+\begin{itemize}
+    \item Matthew:
+    \item Patrick:
+    \item Michael:
+    \item All:
+\end{itemize}
+
+\end{document}
