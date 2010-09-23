@@ -1,7 +1,7 @@
 % Matthew Lindsay, Patrick McBryde, Michael Schultz
 % CSE521S Project Proposal
 
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \usepackage[margin=1in]{geometry}
@@ -35,17 +35,13 @@ possible using other sensing metrics as needed.
 In the end, we plan to have developed an extensible system able to provide the
 same information as existing systems with the addition of being able to
 support different sensors by using an open platform.
-TinyOS will allows us to extend our monitoring to other metrics such as
+TinyOS will allow us to extend our monitoring to other metrics such as
 headlight, heat, or magnetic field detection with great ease.
 Also, unlike most existing solutions, our system will not require expensive
 installation and simplifies hardware and software expansion.
 
 To achieve these goals, we intend to use the Tmote Sky/TelosB mote platform
 which have an expansion connector that allows external sensors to be connected.
-Here we'll need to develop our software to detect a change in voltage from the
-ADC inputs or a signal from the digital inputs.
-As long as our external interface doesn't change we should be able to swap in
-and out external sensors without problem.
 To reduce installation costs, we will use a multi-hop routing protocol (likely
 the collection tree protocol) to communicate data from a sensor to the base
 station.
@@ -58,7 +54,7 @@ knowledge of where to go, so they don't cause physical congestion.
 We also wish to monitor the duration of parking space use, to allow a parking
 attendant to be notified when a person has overused their space.
 
-We would like 5 TelosB/Tmote Sky sensor (2 for sensor testing and 3 for network
+We would like 6 TelosB/Tmote Sky sensors (2 for sensor testing and 4 for network
 development to build a non-trivial routing topology).
 It would also be interesting to use a Mica family board with the MTS310CA
 (magnetometer) sensor board, to test vehicle detection with a magnetometer,
@@ -78,7 +74,7 @@ systems.  The specific breakdown of high-level duties and responsibilities is as
 follows:
 
 \begin{itemize}
-    \item Matthew: Handle sensing methods and help develop software to read get
+    \item Matthew: Handle sensing methods, base station and help develop software to read get
     sensed data on to the mote.
     \item Patrick: Handle data communication on the network to get sensed data
     to the base station.
