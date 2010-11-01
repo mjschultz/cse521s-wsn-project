@@ -2,7 +2,7 @@
 
 import httplib
 
-host = httplib.HTTPConnection('localhost:8080')
+host = httplib.HTTPConnection('cse521s-wsn-project.appspot.com')
 
 my_json = """
 [
@@ -19,7 +19,7 @@ my_json = """
 ]
 """
 
-host.request('PUT', '/lot/31', my_json)
+host.request('PUT', '/lot/my_home', my_json)
 resp = host.getresponse()
 print resp.status, resp.reason
 print resp.read()

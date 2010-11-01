@@ -95,8 +95,8 @@ class LotHandler(webapp.RequestHandler) :
             html += """
 <style>
 html { height: 100% }
-body { height: 90%; margin: 0px; padding: 0px }
-#map_canvas { height: 90% }
+body { height: 90%; }
+#map_canvas { height:90% }
 </style>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
