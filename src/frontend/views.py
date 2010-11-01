@@ -1,5 +1,5 @@
 import cgi
-import json
+from django.utils import simplejson as json
 from controller import Query
 from model import ParkingLot, ParkingSpace
 
