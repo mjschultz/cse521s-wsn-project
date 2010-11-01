@@ -1,0 +1,23 @@
+Create a new lot through URI/lot/
+ - selecting a lot will display information about that lot
+
+Get the status of a lot:
+ - GET /lot/<lot-id> returns current status of lot (in HTML, right now)
+ - will add /lot/<lot-id>/.json for JSON response
+
+Update Lot Status Information
+ - PUT request will update the status of a lot (returns HTTP 303)
+   just PUT /lot/<lot-id> with JSON body
+ - Example of JSON for PUT:
+[
+	{
+		"space_id": 1,
+		"is_empty": false,
+		"temperature": 71
+	},
+	{
+		"space_id": 2,
+		"is_empty": false,
+		"temperature": 71
+	}
+]
