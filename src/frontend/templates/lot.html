@@ -17,7 +17,7 @@
 {% endif %}
 {% endblock head %}
 {% block content %}
-<p><em>{{ full_count }}/{{ space_count }} ({{ fullness }}% full)</em></p>
+<p><img src="/media/usage-{{ full_count }}-{{ unknown_count }}-{{ empty_count }}.png" /> <em>{{ full_count }}/{{ space_count }} ({{ full_ratio }}% full, {{ unknown_ratio }}% unknown)</em></p>
 <ul>
 	{% for space in spaces %}
     <li>Space {{ space.key.name }} is {% if space.is_empty %}empty{% else %}full{% endif %}
@@ -27,6 +27,6 @@
 	{% endfor %}
 </ul>
 {% if geo_point %}
-<div id="map_canvas" style="width:90%;height:90%;"></div>
+<div id="map_canvas" style="width:100%;height:90%;"></div>
 {% endif %}
 {% endblock content %}

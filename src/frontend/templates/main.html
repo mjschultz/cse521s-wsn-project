@@ -20,7 +20,7 @@ function geo_locate() {
 {% block content %}
 <ul>
 	{% for lot in lots %}
-	<li><a href="/lot/{{ lot.lot_id }} ">{{ lot.lot_id }}</a></li>
+    <li><a href="/lot/{{ lot.0.lot_id }} "><img src="/media/usage-{{ lot.1 }}-{{ lot.2 }}-{{ lot.3 }}.png" /> {{ lot.0.lot_id }}</a></li>
 	{% endfor %}
 </ul>
 <form method="post">

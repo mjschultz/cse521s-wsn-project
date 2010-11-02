@@ -17,8 +17,19 @@ class MainPage(webapp.RequestHandler) :
 
 class LotPage(webapp.RequestHandler) :
     def get(self) :
-        lots = ParkingLot.all()
-        lots.order('-timestamp')
+        c = Controller()
+        in_lots = ParkingLot.all()
+        in_lots.order('-timestamp')
+
+        lots = []
+        for lot in in_lots :
+            (spaces, temp) = c.getSpaces(lot.key().name())
+            space_count = lot.space_count
+            full_spaces = copy.deepcopy(spaces)
+            full_count = full_spaces.filter('is_empty =', False).count()
+            unknown_count = space_count - spaces.count()
+            empty_count = space_count - unknown_count - full_count
+            lots.append((lot, full_count, unknown_count, empty_count))
 
         values = {
             'title': 'Available Parking Lots',
@@ -60,12 +71,17 @@ class LotHandler(webapp.RequestHandler) :
         space_count = lot.space_count
         full_spaces = copy.deepcopy(spaces)
         full_count = full_spaces.filter('is_empty =', False).count()
+        unknown_count = space_count - spaces.count()
+        empty_count = space_count - unknown_count - full_count
 
         values = {
             'title': 'Parking Lot '+lot_id,
             'full_count': full_count,
             'space_count': space_count,
-            'fullness': 100.0 * full_count / space_count,
+            'unknown_count': unknown_count,
+            'empty_count': empty_count,
+            'full_ratio': 100 * full_count / space_count,
+            'unknown_ratio': 100 * unknown_count / space_count,
             'spaces': full_spaces,
             'geo_point': geo_point,
             'body_actions': 'onload="initialize();"',
