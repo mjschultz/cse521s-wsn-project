@@ -110,7 +110,7 @@ class LotHandler(webapp.RequestHandler) :
             path = os.path.join(base_path, 'templates/error.html')
             self.response.out.write(template.render(path, values))
 
-    def put(self, lot_id) :
+    def put(self, lot_id, type) :
         my_json = json.loads(self.request.body)
 
         # process the data
