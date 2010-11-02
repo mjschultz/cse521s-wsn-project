@@ -4,6 +4,9 @@ class ParkingLot(db.Model) :
     lot_id = db.StringProperty()
     timestamp = db.DateTimeProperty(auto_now=True)
     space_count = db.IntegerProperty()
+    full_count = db.IntegerProperty()
+    empty_count = db.IntegerProperty()
+    unknown_count = db.IntegerProperty()
     geo_point = db.GeoPtProperty()
 
 class ParkingSpace(db.Model) :

@@ -17,12 +17,11 @@
 {% endif %}
 {% endblock head %}
 {% block content %}
-<p><img src="/media/usage-{{ full_count }}-{{ unknown_count }}-{{ empty_count }}.png" /> {{ full_count }}/{{ space_count }} ({{ full_ratio }}% full, {{ unknown_ratio }}% unknown)</p>
+<p><img src="/media/usage-{{ lot.full_count|default:"0" }}-{{ lot.unknown_count|default:"1" }}-{{ lot.empty_count|default:"0" }}.png" /> {{ lot.full_count }}/{{ lot.space_count }} ({{ full_ratio }}% full, {{ unknown_ratio }}% unknown)</p>
 <p><em>Last update {{ lot.timestamp|timesince }} ago.</em></p>
 <ul>
 	{% for space in spaces %}
-    <li>Space {{ space.key.name }} is {% if space.is_empty %}empty{% else
-    %}full{% endif %} since {{ space.timestamp|timesince }} ago.
+    <li>Space {{ space.key.name }} is {% if space.is_empty %}empty{% else %}full{% endif %} since {{ space.timestamp|timesince }} ago.
     {% if space.extra_info %}
     ({% for info in space.extra_info|split %}{{ info }}{% if not forloop.last %}, {% endif %}{% endfor %})
     {% endif %}</li>

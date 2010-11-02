@@ -1,8 +1,21 @@
 #!/usr/bin/env python
 
 import httplib
+import sys
 
-host = httplib.HTTPConnection('cse521s-wsn-project.appspot.com')
+if len(sys.argv) >= 2 :
+    hostname = sys.argv[1]
+else :
+    hostname = 'cse521s-wsn-project.appspot.com'
+
+if len(sys.argv) >= 3 :
+    lotname = sys.argv[2]
+else :
+    lotname = 'mjs_home'
+
+print 'PUT to',hostname,'in lot',lotname
+
+host = httplib.HTTPConnection(hostname)
 
 my_json = """
 [
@@ -34,7 +47,7 @@ my_json = """
 ]
 """
 
-host.request('PUT', '/lot/mjs_home', my_json)
+host.request('PUT', '/lot/'+lotname, my_json)
 resp = host.getresponse()
 print resp.status, resp.reason
 print resp.read()

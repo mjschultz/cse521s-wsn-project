@@ -18,18 +18,8 @@ class MainPage(webapp.RequestHandler) :
 class LotPage(webapp.RequestHandler) :
     def get(self) :
         c = Controller()
-        in_lots = ParkingLot.all()
-        in_lots.order('-timestamp')
-
-        lots = []
-        for lot in in_lots :
-            (spaces, temp) = c.getSpaces(lot.key().name())
-            space_count = lot.space_count
-            full_spaces = copy.deepcopy(spaces)
-            full_count = full_spaces.filter('is_empty =', False).count()
-            unknown_count = space_count - spaces.count()
-            empty_count = space_count - unknown_count - full_count
-            lots.append((lot, full_count, unknown_count, empty_count))
+        lots = ParkingLot.all()
+        lots.order('-timestamp')
 
         values = {
             'title': 'Available Parking Lots',
@@ -40,10 +30,15 @@ class LotPage(webapp.RequestHandler) :
         self.response.out.write(template.render(path, values))
 
     def post(self) :
+        c = Controller()
+
         # Get data from request
         lot_id = self.request.get('lot_id')
         space_count = int(self.request.get('space_count'))
-        (lat, lon) = self.request.get('geo_pt').split(',')
+        if self.request.get('geo_pt') :
+            (lat, lon) = self.request.get('geo_pt').split(',')
+        else :
+            (lat, lon) = (None, None)
 
         # create the lot
         c.makeLot(lot_id, space_count, lat, lon)
@@ -53,10 +48,21 @@ class LotPage(webapp.RequestHandler) :
         self.redirect('/lot/')
 
 class LotHandler(webapp.RequestHandler) :
-
     def get(self, lot_id, type) :
         c = Controller()
         (spaces, lot) = c.getSpaces(lot_id)
+        if lot == None :
+            self.error(404)
+            values = {'title':'Error: Not Found',
+                      'code': 404,
+                      'message':'Could not find a lot by that id.'}
+            path = os.path.join(base_path, 'templates/error.html')
+            self.response.out.write(template.render(path, values))
+            return
+
+
+        full_spaces = copy.deepcopy(spaces)
+        full_spaces.filter('is_empty =', False)
 
         if type == None or type == '/' :
             view = 'html'
@@ -68,21 +74,11 @@ class LotHandler(webapp.RequestHandler) :
         else :
             geo_point = None
 
-        space_count = lot.space_count
-        full_spaces = copy.deepcopy(spaces)
-        full_count = full_spaces.filter('is_empty =', False).count()
-        unknown_count = space_count - spaces.count()
-        empty_count = space_count - unknown_count - full_count
-
         values = {
             'title': 'Parking Lot '+lot_id,
             'lot': lot,
-            'full_count': full_count,
-            'space_count': space_count,
-            'unknown_count': unknown_count,
-            'empty_count': empty_count,
-            'full_ratio': 100 * full_count / space_count,
-            'unknown_ratio': 100 * unknown_count / space_count,
+            'full_ratio': 100 * lot.full_count / lot.space_count,
+            'unknown_ratio': 100 * lot.unknown_count / lot.space_count,
             'spaces': full_spaces,
             'geo_point': geo_point,
             'body_actions': 'onload="initialize();"',
@@ -118,8 +114,11 @@ class LotHandler(webapp.RequestHandler) :
 
         # process the data
         c = Controller()
-        c.putSpaces(lot_id, my_json)
+        success = c.putSpaces(lot_id, my_json)
 
         # return status 303 with location set to get
-        self.response.set_status(303)
+        if success :
+            self.response.set_status(303)
+        else :
+            self.response.set_status(400)
 
