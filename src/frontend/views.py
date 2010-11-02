@@ -1,6 +1,6 @@
-import cgi
+import cgi, copy
 from django.utils import simplejson as json
-from controller import Query
+from controller import Controller
 from model import ParkingLot, ParkingSpace
 import os.path
 
@@ -29,16 +29,13 @@ class LotPage(webapp.RequestHandler) :
         self.response.out.write(template.render(path, values))
 
     def post(self) :
-        # create a new lot
+        # Get data from request
         lot_id = self.request.get('lot_id')
         space_count = int(self.request.get('space_count'))
-        geo_pt = self.request.get('geo_pt')
+        (lat, lon) = self.request.get('geo_pt').split(',')
 
-        lot = ParkingLot(key_name=lot_id)
-        lot.lot_id = lot_id
-        lot.space_count = space_count
-        lot.geo_point = db.GeoPt(*geo_pt.split(','))
-        lot.put()
+        # create the lot
+        c.makeLot(lot_id, space_count, lat, lon)
 
         # return status 201
         self.response.set_status(201)
@@ -47,13 +44,13 @@ class LotPage(webapp.RequestHandler) :
 class LotHandler(webapp.RequestHandler) :
 
     def get(self, lot_id, type) :
-        q = Query()
-        (spaces, lot) = q.getSpaces(lot_id)
+        c = Controller()
+        (spaces, lot) = c.getSpaces(lot_id)
 
-        if type == None :
-            type = '/'
-
-        view = type.strip('/')
+        if type == None or type == '/' :
+            view = 'html'
+        else :
+            view = type.strip('/.')
         
         if lot.geo_point :
             geo_point = str(lot.geo_point.lat)+','+str(lot.geo_point.lon)
@@ -61,21 +58,20 @@ class LotHandler(webapp.RequestHandler) :
             geo_point = None
 
         space_count = lot.space_count
-        empty = 0
-        for space in spaces :
-            if space.is_empty :
-                empty += 1
+        full_spaces = copy.deepcopy(spaces)
+        full_count = full_spaces.filter('is_empty =', False).count()
 
         values = {
             'title': 'Parking Lot '+lot_id,
-            'empty': empty,
+            'full_count': full_count,
             'space_count': space_count,
-            'fullness': 100.0 * empty / space_count,
-            'spaces': spaces,
+            'fullness': 100.0 * full_count / space_count,
+            'spaces': full_spaces,
             'geo_point': geo_point,
             'body_actions': 'onload="initialize();"',
         }
-        if view == '.json' :
+
+        if view == 'json' :
             spaces_out = []
             for space in spaces :
                 space_out = {}
@@ -87,7 +83,7 @@ class LotHandler(webapp.RequestHandler) :
                         'geo_pt':geo_point,
                         'spaces':spaces_out}
             self.response.out.write(json.dumps(json_out))
-        elif view == '' :
+        elif view == 'html' :
             path = os.path.join(base_path, 'templates/lot.html')
             self.response.out.write(template.render(path, values))
         else :
@@ -102,8 +98,8 @@ class LotHandler(webapp.RequestHandler) :
         my_json = json.loads(self.request.body)
 
         # process the data
-        q = Query()
-        q.putSpaces(lot_id, my_json)
+        c = Controller()
+        c.putSpaces(lot_id, my_json)
 
         # return status 303 with location set to get
         self.response.set_status(303)

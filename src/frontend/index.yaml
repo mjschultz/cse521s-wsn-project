@@ -12,6 +12,13 @@ indexes:
 
 - kind: ParkingSpace
   properties:
+  - name: is_empty
+  - name: lot
+  - name: timestamp
+    direction: desc
+
+- kind: ParkingSpace
+  properties:
   - name: lot
   - name: timestamp
     direction: desc

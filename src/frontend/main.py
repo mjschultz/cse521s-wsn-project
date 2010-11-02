@@ -13,6 +13,9 @@ pages = [
 
 application = webapp.WSGIApplication(pages, debug=True)
 
+# extra template filters
+webapp.template.register_template_library('template_filters')
+
 def main() :
     run_wsgi_app(application)
 

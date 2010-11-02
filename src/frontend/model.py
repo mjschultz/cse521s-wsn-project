@@ -12,4 +12,3 @@ class ParkingSpace(db.Model) :
     is_empty = db.BooleanProperty()
     timestamp = db.TimeProperty(auto_now=True)
     extra_info = db.TextProperty()
-    geo_point = db.GeoPtProperty()

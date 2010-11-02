@@ -6,10 +6,13 @@ from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-class Query :
-    def getLot(self, lot_id) :
-        return db.GqlQuery('SELECT * FROM ParkingLot WHERE lot_id = :1',
-                           lot_id)
+class Controller :
+    def makeLot(self, lot_id, space_count, lat, lon) :
+        lot = ParkingLot(key_name=lot_id)
+        lot.lot_id = lot_id
+        lot.space_count = space_count
+        lot.geo_point = db.GeoPt(lat, lon)
+        lot.put()
 
     def getSpaces(self, lot_id) :
         lot = ParkingLot.get_by_key_name(lot_id)
