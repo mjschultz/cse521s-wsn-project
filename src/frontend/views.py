@@ -1,4 +1,4 @@
-import cgi, copy
+import cgi, copy, time
 from django.utils import simplejson as json
 from controller import Controller
 from model import ParkingLot, ParkingSpace
@@ -76,6 +76,7 @@ class LotHandler(webapp.RequestHandler) :
 
         values = {
             'title': 'Parking Lot '+lot_id,
+            'lot': lot,
             'full_count': full_count,
             'space_count': space_count,
             'unknown_count': unknown_count,
@@ -89,14 +90,16 @@ class LotHandler(webapp.RequestHandler) :
 
         if view == 'json' :
             spaces_out = []
-            for space in spaces :
+            for s in spaces :
                 space_out = {}
-                space_out['space_id'] = space.key().name()
-                space_out['is_empty'] = space.is_empty
-                space_out['extra_info'] = space.extra_info
+                space_out['space_id'] = s.key().name()
+                space_out['is_empty'] = s.is_empty
+                space_out['extra_info'] = s.extra_info
+                space_out['timestamp'] = time.mktime(s.timestamp.timetuple())
                 spaces_out.append(space_out)
             json_out = {'lot_id':lot_id,
                         'geo_pt':geo_point,
+                        'timestamp':time.mktime(lot.timestamp.timetuple()),
                         'spaces':spaces_out}
             self.response.out.write(json.dumps(json_out))
         elif view == 'html' :
