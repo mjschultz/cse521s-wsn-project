@@ -8,7 +8,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 pages = [
     ('/', views.MainPage),
     ('/lot/?', views.LotPage),
-    ('/lot/([A-Za-z0-9-_]+)', views.LotHandler),
+    ('/lot/([A-Za-z0-9-_]+)(/.*)?', views.LotHandler),
 ]
 
 application = webapp.WSGIApplication(pages, debug=True)
