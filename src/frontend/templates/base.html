@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        {% block head %}{% endblock %}
+    </head>
+    <body {{ body_actions }}>
+        <h1>{{ title }}</h1>
+        {% block content %}{% endblock %}
+    </body>
+</html>

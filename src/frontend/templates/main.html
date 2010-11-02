@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+.field { display: block; margin:4px 0; }
+.field > label { display: block; }
+.required { font-weight:bold; }
+</style>
+<script type="text/javascript">
+function geo_locate() {
+    if (navigator.geolocation) {
+        geo_pt = document.getElementById('geo_pt');
+        navigator.geolocation.getCurrentPosition(function(position) {
+        loc = position.coords.latitude+","+position.coords.longitude;
+        geo_pt.value = loc;
+        });
+    }
+}
+</script>
+{% endblock head %}
+{% block content %}
+<ul>
+	{% for lot in lots %}
+	<li><a href="/lot/{{ lot.lot_id }} ">{{ lot.lot_id }}</a></li>
+	{% endfor %}
+</ul>
+<form method="post">
+    <fieldset>
+        <legend>Create Parking Lot</legend>
+        <div class="field required">
+            <label for="lot_id">Lot Id:</label>
+            <input type="text" name="lot_id" id="lot_id" />
+        </div>
+        <div class="field required">
+            <label for="space_count">Number of Spaces:</label>
+            <input type="number" name="space_count" id="space_count" />
+        </div>
+        <div class="field">
+            <label for="geo_pt">Geo Location:</label>
+            <input type="text" name="geo_pt" id="geo_pt" />
+        </div>
+
+        <input type="submit" name="submit" value="Create" />
+    </fieldset>
+</form>
+{% endblock content %}

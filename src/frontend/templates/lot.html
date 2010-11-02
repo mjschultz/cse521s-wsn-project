@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block head %}
+{% if geo_point %}
+<style>
+	html {height:90%;}
+	body {height:90%;}
+</style>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+	function initialize() {
+		var latlng = new google.maps.LatLng({{ geo_point }});
+		var myOptions = {zoom:14, center:latlng, mapTypeId:google.maps.MapTypeId.ROADMAP};
+		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+		var marker = new google.maps.Marker({position:latlng, map:map, title:"{{ title }}"});
+	}
+</script>
+{% endif %}
+{% endblock head %}
+{% block content %}
+<p><em>{{ empty }}/{{ space_count }} ({{ fullness }}% full)</em></p>
+<ul>
+	{% for space in spaces %}
+	<li>Space {{ space.key.name }} is {% if space.is_empty %}empty{% else %}full{% endif %}</li>
+	{% endfor %}
+</ul>
+{% if geo_point %}
+<div id="map_canvas" style="width:90%;height:90%;"></div>
+{% endif %}
+{% endblock content %}

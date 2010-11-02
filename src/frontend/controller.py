@@ -7,11 +7,6 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 class Query :
-    def getGreetings(self, limit=10) :
-        return db.GqlQuery('SELECT * FROM Greeting '\
-                           'ORDER BY date '\
-                           'DESC LIMIT '+limit)
-
     def getLot(self, lot_id) :
         return db.GqlQuery('SELECT * FROM ParkingLot WHERE lot_id = :1',
                            lot_id)
