@@ -11,7 +11,7 @@ else :
 if len(sys.argv) >= 3 :
     lotname = sys.argv[2]
 else :
-    lotname = 'mjs_home'
+    lotname = 'wustl_millbrook'
 
 print 'PUT to',hostname,'in lot',lotname
 

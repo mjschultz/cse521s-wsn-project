@@ -18,7 +18,7 @@
 {% endblock head %}
 {% block content %}
 <p><img src="/media/usage-{{ lot.full_count|default:"0" }}-{{ lot.unknown_count|default:"1" }}-{{ lot.empty_count|default:"0" }}.png" /> {{ lot.full_count }}/{{ lot.space_count }} ({{ full_ratio }}% full, {{ unknown_ratio }}% unknown)</p>
-<p><em>Last update {{ lot.timestamp|timesince }} ago.</em></p>
+<p><em>Last updated {{ lot.timestamp|timesince }} ago.</em></p>
 <ul>
 	{% for space in spaces %}
     <li>Space {{ space.key.name }} is {% if space.is_empty %}empty{% else %}full{% endif %} since {{ space.timestamp|timesince }} ago.
