@@ -31,8 +31,18 @@ my_json = """
  },
  {
   "space_id":3,
-  "is_empty":false,
+  "is_empty":true,
   "temperature":91
+ },
+ {
+  "space_id":4,
+  "is_empty":true,
+  "temperature":31
+ },
+ {
+  "space_id":5,
+  "is_empty":false,
+  "temperature":41
  }
 ]
 """

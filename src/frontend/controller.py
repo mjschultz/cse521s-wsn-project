@@ -54,6 +54,10 @@ class Controller :
         spaces = ParkingSpace.all()
         spaces.filter('lot =', lot)
         full_spaces = copy.deepcopy(spaces)
+        # update the number of spaces in the lot (if needed)
+        # (we know about the number of spaces we've seen)
+        if spaces.count() > lot.space_count :
+            lot.space_count = spaces.count()
         full_count = full_spaces.filter('is_empty =', False).count()
         unknown_count = lot.space_count - spaces.count()
         empty_count = lot.space_count - unknown_count - full_count
