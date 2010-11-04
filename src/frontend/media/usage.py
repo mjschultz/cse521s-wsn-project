@@ -10,41 +10,41 @@ height = 15
 total_width = 100
 
 class Imager(webapp.RequestHandler) :
-    def get(self, green_count, yellow_count, red_count) :
-        gc = int(green_count)
-        yc = int(yellow_count)
-        rc = int(red_count)
+    def get(self, full_count, unknown_count, empty_count) :
+        fc = int(full_count)
+        uc = int(unknown_count)
+        ec = int(empty_count)
 
-        total = gc + yc + rc
+        total = fc + uc + ec
         multiplier = 1.0 * total_width / total
 
-        green_pos = int(round(gc * multiplier))
-        yellow_pos = int(round(yc * multiplier))
-        red_pos = int(round(rc * multiplier))
+        full_pos = int(round(fc * multiplier))
+        unknown_pos = int(round(uc * multiplier))
+        empty_pos = int(round(ec * multiplier))
 
-        if green_pos < height :
-            green_width = height
+        if full_pos < height :
+            full_width = height
         else :
-            green_width = green_pos
+            full_width = full_pos
 
-        if yellow_pos < height :
-            yellow_width = height
+        if unknown_pos < height :
+            unknown_width = height
         else :
-            yellow_width = yellow_pos
+            unknown_width = unknown_pos
 
-        if red_pos < height :
-            red_width = height
+        if empty_pos < height :
+            empty_width = height
         else :
-            red_width = red_pos
+            empty_width = empty_pos
 
-        red = images.resize(red_png, red_width, red_width, output_encoding=images.PNG)
-        yellow = images.resize(yellow_png, yellow_width, yellow_width, output_encoding=images.PNG)
-        green = images.resize(green_png, green_width, green_width, output_encoding=images.PNG)
+        full = images.resize(red_png, full_width, full_width, output_encoding=images.PNG)
+        unknown = images.resize(yellow_png, unknown_width, unknown_width, output_encoding=images.PNG)
+        empty = images.resize(green_png, empty_width, empty_width, output_encoding=images.PNG)
 
-        red_in = (red, green_pos+yellow_pos, 0, 1.0, images.TOP_LEFT)
-        yellow_in = (yellow, green_pos, 0, 1.0, images.TOP_LEFT)
-        green_in = (green, 0, 0, 1.0, images.TOP_LEFT)
-        inputs = (green_in, yellow_in, red_in)
+        full_in = (full, 0, 0, 1.0, images.TOP_LEFT)
+        unknown_in = (unknown, full_pos, 0, 1.0, images.TOP_LEFT)
+        empty_in = (empty, full_pos+unknown_pos, 0, 1.0, images.TOP_LEFT)
+        inputs = (full_in, unknown_in, empty_in)
 
         self.response.headers['Content-Type'] = 'image/png'
         self.response.out.write(images.composite(inputs, total_width, height))
