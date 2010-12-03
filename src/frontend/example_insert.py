@@ -31,7 +31,7 @@ my_json = """
  },
  {
   "space_id":3,
-  "is_empty":true,
+  "is_empty":false,
   "temperature":91
  },
  {

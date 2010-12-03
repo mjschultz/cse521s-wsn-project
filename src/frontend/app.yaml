@@ -6,5 +6,7 @@ api_version: 1
 handlers:
 - url: /media/usage-\d+-\d+-\d+.png
   script: media/usage.py
+- url: /media/js/
+  static_dir: media/js/
 - url: /.*
   script: main.py
