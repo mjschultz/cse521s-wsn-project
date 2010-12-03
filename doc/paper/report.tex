@@ -1,0 +1,107 @@
+% CSE 521S Final Report
+% A Parking Guidance and Information System for TinyOS
+% By Matthew Lindsay, Patrick McBryde, Michael Schultz
+
+\documentclass{acm_proc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx, subfig}
+\usepackage{gensymb} % for \celsius
+
+\begin{document}
+
+\title{A Parking Guidance and Information System for TinyOS}
+\subtitle{CSE 521S Final Report}
+
+\numberofauthors{3}
+\author{
+\alignauthor Matthew Lindsay\\
+% 2nd. author
+\alignauthor Patrick McBryde\\
+% 3rd. author
+\alignauthor Michael Schultz\\
+\and
+\affaddr{Washington University in Saint Louis}\\
+}
+
+\maketitle
+
+\begin{abstract}
+About 2 paragraphs for describing what this paper is about.
+\end{abstract}
+
+\section{Introduction}
+
+More details text about what this is about, what exists, why we wanted to
+do this (why it was interesting/motivation, etc.).
+
+What the rest of the paper has in store.
+
+\section{Goals}\label{sec:goals}
+
+What are the goals for this project, what we set out to do (in detail).
+
+\section{Design}\label{sec:design}
+
+Design and components of the infrastructure.  What we need to succeed in
+out goals.
+High level description of the various components we developed, to be
+explained in detail below.
+Probably a graphics of the gist of the system.
+
+\subsection{Hardware}
+
+This should cover the physical hardware we used in building this.
+Including (but not limited to):
+
+- TelosB motes (listing any relevant specifications, why we used TelosB
+ and not something else) \cite{xbow:telosb-datasheet}.
+
+- External sensor we used, specifications for that, more detail than
+ TelosB since the reader will be less familiar with it, why we used that.
+
+At least one pictures of the telosb, the sensors, or the telosb with sensor
+attached.
+
+\subsection{Software}
+
+Yup we had software.
+
+A paragraph or two about TinyOS and building whatever we used there
+(interfaces, interaction with other sensors and base
+station, CTP)~\cite{tep119:collection}.
+
+A paragraph about the base station software and what it does.
+
+A paragraph laying out what Google AppEngine is, why we chose it, and what
+it does for us.
+
+A paragraph or two describing the AE backend and frontend(s).
+
+\section{Implementation}
+
+More detailed description of the underlying implementation (packet formats
+in the network, sending data to AppEngine, specific technology used on
+backend, any frontend stuff).
+
+
+\section{Experiment}\label{sec:experiment}
+
+Paragraph about experiments that show our system works.
+
+\section{Related Works}\label{sec:related}
+
+\section{Lessons Learned}\label{sec:lessons}
+
+Anything we would have done differently if we were to pursue this project
+in more detail again.
+
+\section{Conclusions and Future Work}\label{sec:conclusions}
+
+Conclusions from this project.
+
+% \section{References}
+\bibliographystyle{abbrv}
+\bibliography{report}
+
+\end{document}
