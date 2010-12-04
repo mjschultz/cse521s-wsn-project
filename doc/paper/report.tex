@@ -6,7 +6,6 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{graphicx, subfig}
-\usepackage{gensymb} % for \celsius
 
 \begin{document}
 
@@ -27,10 +26,47 @@
 \maketitle
 
 \begin{abstract}
-About 2 paragraphs for describing what this paper is about.
+``Intelligent Transportation Systems'' (ITS) are a mix of systems that
+gather various data metrics from transportation areas (parking lots,
+streets, alleyways, etc.), aggregate this data together, and present
+coherent information to the end-users of the system.
+Orchestrating such a system presents several challenges at each level.
+How do you gather the data and at what granularity?
+Where does the data go once gathered and can it be useful to anyone?
+If it can be useful, how can it be presented to end-users to provide
+accurate and simple-to-interpret content?
+This paper presents and explains our decisions in developing a ``Parking
+Guidance and Information'' (PGI) system for TinyOS.
 \end{abstract}
 
 \section{Introduction}
+
+% From proposal
+This project proposes to build parking guidance and information system on
+the
+TinyOS platform.
+We will take advantage of the multi-hop routing abilities and a
+heterogeneous
+mix of sensors to keep track of parking spot availability and usage data,
+possible using other sensing metrics as needed.
+In the end, we plan to have developed an extensible system able to provide
+the
+same information as existing systems with the addition of being able to
+support different sensors by using an open platform.
+TinyOS will allow us to extend our monitoring to other metrics such as
+headlight, heat, or magnetic field detection with great ease.
+Also, unlike most existing solutions, our system will not require expensive
+installation and simplifies hardware and software expansion.
+% end from proposal
+
+
+\cite{sakai:pgi-toyota}
+\cite{vincent:streetview}
+\cite{pgi:signal-park}
+\cite{pgi:streetline}
+PGI systems are designed to keep track of vehicular information in parking
+garages, at present the most common form simply counts the number of spaces
+available in a designated area and can be prohibitively expensive.
 
 More details text about what this is about, what exists, why we wanted to
 do this (why it was interesting/motivation, etc.).
@@ -40,6 +76,28 @@ What the rest of the paper has in store.
 \section{Goals}\label{sec:goals}
 
 What are the goals for this project, what we set out to do (in detail).
+
+% from proposal
+To achieve these goals, we intend to use the Tmote Sky/TelosB mote platform
+which have an expansion connector that allows external sensors to be
+connected.
+To reduce installation costs, we will use a multi-hop routing protocol
+(likely
+the collection tree protocol) to communicate data from a sensor to the base
+station.
+This allows for a large number of sensors to be deployed with little effort
+or
+physical infrastructure to be in place.
+Finally, once the data is aggregated at a central location it must be
+displayed
+to the end user in an easy to read/interpret interface.
+This is important because the vehicle operator needs to have a quick,
+intuitive
+knowledge of where to go, so they don't cause physical congestion.
+We also wish to monitor the duration of parking space use, to allow a
+parking
+attendant to be notified when a person has overused their space.
+% end from proposal
 
 \section{Design}\label{sec:design}
 
@@ -63,6 +121,17 @@ Including (but not limited to):
 At least one pictures of the telosb, the sensors, or the telosb with sensor
 attached.
 
+% from proposal
+We would like 6 TelosB/Tmote Sky sensors (2 for sensor testing and 4 for
+network
+development to build a non-trivial routing topology).
+It would also be interesting to use a Mica family board with the MTS310CA
+(magnetometer) sensor board, to test vehicle detection with a magnetometer,
+though not strictly required as we can find other sensors to use.
+Alternatively, if we can interface a magnetometer with the TelosB/Tmote Sky
+mote board that could be used instead of a Mica family board.
+% end from proposal
+
 \subsection{Software}
 
 Yup we had software.
@@ -84,6 +153,21 @@ More detailed description of the underlying implementation (packet formats
 in the network, sending data to AppEngine, specific technology used on
 backend, any frontend stuff).
 
+% from proposal
+The major components of this project are building and developing the
+sensing
+devices, writing and testing the networking and communications
+software to handle data delivery, and creating a friendly front end to
+present
+and track the information as needed.
+If we discover any of these components are significantly easier than
+others, it
+is easy to combine forces to develop new/better methods for any of them.
+We also have an interest in discovering more specific information of
+existing
+systems and getting up-to-date in the area of intelligent transportation
+systems.
+% end from proposal
 
 \section{Experiment}\label{sec:experiment}
 
