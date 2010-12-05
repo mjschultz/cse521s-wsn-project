@@ -5,7 +5,7 @@
 \documentclass{acm_proc}
 \usepackage{hyperref}
 \usepackage{url}
-\usepackage{graphicx, subfig}
+\usepackage{graphicx}
 
 \begin{document}
 
@@ -41,41 +41,74 @@ Guidance and Information'' (PGI) system for TinyOS.
 
 \section{Introduction}
 
-% From proposal
-This project proposes to build parking guidance and information system on
-the
-TinyOS platform.
-We will take advantage of the multi-hop routing abilities and a
-heterogeneous
-mix of sensors to keep track of parking spot availability and usage data,
-possible using other sensing metrics as needed.
-In the end, we plan to have developed an extensible system able to provide
-the
-same information as existing systems with the addition of being able to
-support different sensors by using an open platform.
-TinyOS will allow us to extend our monitoring to other metrics such as
-headlight, heat, or magnetic field detection with great ease.
-Also, unlike most existing solutions, our system will not require expensive
-installation and simplifies hardware and software expansion.
-% end from proposal
+Driving to new destinations always brings some level of stress and
+uncertainty.
+Where am I going, what do the roads and intersections look like, what side
+of the road is the place on, where do I park?
+These are all questions that dart through the brain when beginning to think
+about going some place new.
+Luckily, maps bring us the answer or at least a partial answer to some of
+those questions.
+In the past decade there has been huge growth of web-based mapping
+technology to help answer these questions even more fully.
+For example, Google Maps allows you to get directions from point A to point
+B, and in the past 5 years has introduced Street
+View~\cite{vincent:streetview} to their interface.
+Street View allows a user to view the roads they will be travelling on from
+an in-car perspective.
+This removes much of the uncertainty when driving, leading to less
+confusion and a better experience (and potentially fewer accidents).
 
+However, there is still that can be done.
+Even after you've arrived at your destination you must find where to park.
+This can also be quite a hassle, as you are unfamiliar with the area and
+during peak hours there may not be a parking space in near proximity.
+To help in this matter, Parking Guidance and Information Systems (PGIS)
+allow drivers to quickly evaluate where best to go to find parking
+efficiently~\cite{sakai:pgi-toyota}.
+Traditional PGI Systems simply count the number of cars that enter and exit
+a designated area and display the number of spots available in that area to
+the driver.
+These systems are imprecise, costly, and can't be integrated with other
+technologies.
 
-\cite{sakai:pgi-toyota}
-\cite{vincent:streetview}
-\cite{pgi:signal-park}
-\cite{pgi:streetline}
-PGI systems are designed to keep track of vehicular information in parking
-garages, at present the most common form simply counts the number of spaces
-available in a designated area and can be prohibitively expensive.
+This paper presents our experiences building a parking guidance and
+information system using the TelosB/TinyOS platform.
+By using motes, it opens the possibility of deploying a single sensor for
+each available parking space allowing for much more detailed information
+about a parking lot as a whole.
+Moreover, with proper sheltering, these sensors can be mounted on the
+surface of a parking lot instead of cutting into the lot and installing an
+inductive loop to detect vehicle presence.
+We also take advantage of the wireless multi-hop routing abilities of
+TinyOS-based motes to avoid wiring and enable a heterogeneous mix of
+sensors to keep track of parking spot availability and usage data.
+Combining these aspects gives a system that can be more precise, lower
+cost, and more easily integrated with future technologies.
 
-More details text about what this is about, what exists, why we wanted to
-do this (why it was interesting/motivation, etc.).
-
-What the rest of the paper has in store.
+The remainder of this paper is as follows.
+Section~\ref{sec:goals} defines the goals of this project more fully.
+Section~\ref{sec:design} presents and explains the high-level architecture
+of our PGI System and details the hardware and software we depend on.
+Section~\ref{sec:implementation} discusses the backend implementation of
+our system to aggregate and store the data we collect from the sensors.
+Section~\ref{sec:experiment} talks about how we convinced ourselves that
+the system worked correctly and, if we have more resources, could scale up
+as needed.
+Sections~\ref{sec:related} and~\ref{sec:lessons} give an overview of
+related works and lessons we learned during this project.
+Finally, Section~\ref{sec:conclusions} concludes this paper with a
+discussion of potential future work for this project.
 
 \section{Goals}\label{sec:goals}
 
 What are the goals for this project, what we set out to do (in detail).
+
+% Answer the questions in the abstract:
+% - How do you gather the data and at what granularity
+% - Where does the data go once gathered and can it be useful to anyone
+% - How can it be presented to end-users to provide accurate and
+%   simple-to-interpret content?
 
 % from proposal
 To achieve these goals, we intend to use the Tmote Sky/TelosB mote platform
@@ -101,11 +134,30 @@ attendant to be notified when a person has overused their space.
 
 \section{Design}\label{sec:design}
 
-Design and components of the infrastructure.  What we need to succeed in
-out goals.
-High level description of the various components we developed, to be
-explained in detail below.
-Probably a graphics of the gist of the system.
+\begin{figure}
+    \begin{center}
+		\includegraphics[width=\columnwidth]{figures/high-level}
+	\end{center}
+	\caption{High-level view of our PGI System. A base station at the lot
+	sends data over the Internet to our aggregator, which end-users can
+	query.}
+	\label{fig:high-level}
+\end{figure}
+
+Figure~\ref{fig:high-level} shows a high-level view of the infrastructure
+of our PGI System.
+Our system begins with a parking lot (left side of
+Figure~\ref{fig:high-level}), each space in this lot is equipped with a
+sensor built on the TelosB/TinyOS platform.
+Data is collected at a per-lot base station, which then sends the data over
+the Internet to our backend.
+When our backend receives the data it updates and logs the changes to the
+data store and organizes the lot information.
+Once the data is stored, clients are able to query the backend and get
+up-to-date information about a specific lot and lots in the vicinity.
+
+Building this system requires a fair amount of hardware and software
+knowledge and is described below.
 
 \subsection{Hardware}
 
@@ -147,7 +199,7 @@ it does for us.
 
 A paragraph or two describing the AE backend and frontend(s).
 
-\section{Implementation}
+\section{Implementation}\label{sec:implementation}
 
 More detailed description of the underlying implementation (packet formats
 in the network, sending data to AppEngine, specific technology used on
@@ -173,7 +225,38 @@ systems.
 
 Paragraph about experiments that show our system works.
 
-\section{Related Works}\label{sec:related}
+\section{Related Work}\label{sec:related}
+
+We are aware of two systems that target per-spot granularity.
+The first, Signal-Park, uses sonar sensors above each parking spot to
+detect the presence of a vehicle~\cite{pgi:signal-park}.
+Approximately three times per second, the sensor is queried to determine
+vehicle presences and updates a central computer.
+This system uses serial lines to connect each sensor with the central
+computer, leading to more costly deploy.
+It also appears to be limited to the parking lot that it is deployed in and
+lacks the ability to aggregate the information for others to benefit.
+It would certainly be possible to improve the connectivity of this system
+to integrate with our back-end aggregation system to take advantage of
+existing installations.
+
+The other system, Streetline, is a startup in the San Francisco area
+that similarly uses a wireless mesh network to link all the sensors
+together~\cite{pgi:streetline}.
+The Streetline system has recently (Summer 2010) begun to roll out sensors
+and upgraded meters for select areas in the San Francisco
+area~\cite{wired:streetline, sfpark}.
+This system uses surface (and sub-surface) sensor mounts that contain a
+wireless transmitter and a magnetometer for vehicle detection.
+Status is sent to a central aggregation server where users can see the
+status of street parking via their web browser, text message, or smart
+phone; it also allows municipal workers to identify vehicles that have not
+paid fully.
+Presuming the Streetline trial is successful and the system expands, our
+system and their system should be able to integrate with little effort and
+could be seen as competitors.
+We view this a positive, as it demonstrates that our project is a useful
+idea with potential buyers available.
 
 \section{Lessons Learned}\label{sec:lessons}
 
