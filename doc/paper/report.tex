@@ -89,9 +89,8 @@ cost, and more easily integrated with future technologies.
 The remainder of this paper is as follows.
 Section~\ref{sec:goals} defines the goals of this project more fully.
 Section~\ref{sec:design} presents and explains the high-level architecture
-of our PGI System and details the hardware and software we depend on.
-Section~\ref{sec:implementation} discusses the backend implementation of
-our system to aggregate and store the data we collect from the sensors.
+of our PGI System and details the hardware and software used during the
+course of this project.
 Section~\ref{sec:experiment} talks about how we convinced ourselves that
 the system worked correctly and, if we have more resources, could scale up
 as needed.
@@ -102,34 +101,36 @@ discussion of potential future work for this project.
 
 \section{Goals}\label{sec:goals}
 
-What are the goals for this project, what we set out to do (in detail).
-
-% Answer the questions in the abstract:
-% - How do you gather the data and at what granularity
-% - Where does the data go once gathered and can it be useful to anyone
-% - How can it be presented to end-users to provide accurate and
-%   simple-to-interpret content?
+Since we believe other solutions to PGI Systems do not represent what
+modern technology is capable of, our goals for this project are to build a
+PGI System that can be easily deployed at a low-cost, aggregates the data
+at a single location, and integrates with user-facing technology to provide
+a rich experience.
+In short, we plan to answer the following questions:
+\begin{itemize}
+	\item How do you gather parking data and at what granularity?
+	\item Where does the data go once gathered and can it be useful to
+	anyone?
+	\item How can it be presented to end-users to provide accurate and
+	simple-to-interpret content?
+\end{itemize}
 
 % from proposal
-To achieve these goals, we intend to use the Tmote Sky/TelosB mote platform
-which have an expansion connector that allows external sensors to be
-connected.
-To reduce installation costs, we will use a multi-hop routing protocol
-(likely
-the collection tree protocol) to communicate data from a sensor to the base
-station.
-This allows for a large number of sensors to be deployed with little effort
-or
-physical infrastructure to be in place.
-Finally, once the data is aggregated at a central location it must be
-displayed
-to the end user in an easy to read/interpret interface.
-This is important because the vehicle operator needs to have a quick,
-intuitive
-knowledge of where to go, so they don't cause physical congestion.
-We also wish to monitor the duration of parking space use, to allow a
-parking
-attendant to be notified when a person has overused their space.
+%To achieve these goals, we intend to use the Tmote Sky/TelosB mote platform
+%which have an expansion connector that allows external sensors to be
+%connected.
+%To reduce installation costs, we will use a multi-hop routing protocol
+%(likely the collection tree protocol) to communicate data from a sensor to
+%the base station.
+%This allows for a large number of sensors to be deployed with little effort
+%or physical infrastructure to be in place.
+%Finally, once the data is aggregated at a central location it must be
+%displayed to the end user in an easy to read/interpret interface.
+%This is important because the vehicle operator needs to have a quick,
+%intuitive knowledge of where to go, so they don't cause physical
+%congestion.
+%We also wish to monitor the duration of parking space use, to allow a
+%parking attendant to be notified when a person has overused their space.
 % end from proposal
 
 \section{Design}\label{sec:design}
@@ -184,7 +185,7 @@ Alternatively, if we can interface a magnetometer with the TelosB/Tmote Sky
 mote board that could be used instead of a Mica family board.
 % end from proposal
 
-\subsection{Software}
+\subsection{Collection Software}
 
 Yup we had software.
 
@@ -194,32 +195,30 @@ station, CTP)~\cite{tep119:collection}.
 
 A paragraph about the base station software and what it does.
 
+% from proposal
+The major components of this project are building and developing the
+sensing devices, writing and testing the networking and communications
+software to handle data delivery, and creating a friendly front end to
+present and track the information as needed.
+If we discover any of these components are significantly easier than
+others, it is easy to combine forces to develop new/better methods for any
+of them.
+We also have an interest in discovering more specific information of
+existing systems and getting up-to-date in the area of intelligent
+transportation systems.
+% end from proposal
+
+
+\subsection{Aggregation Software}
+
 A paragraph laying out what Google AppEngine is, why we chose it, and what
 it does for us.
 
 A paragraph or two describing the AE backend and frontend(s).
 
-\section{Implementation}\label{sec:implementation}
-
 More detailed description of the underlying implementation (packet formats
 in the network, sending data to AppEngine, specific technology used on
 backend, any frontend stuff).
-
-% from proposal
-The major components of this project are building and developing the
-sensing
-devices, writing and testing the networking and communications
-software to handle data delivery, and creating a friendly front end to
-present
-and track the information as needed.
-If we discover any of these components are significantly easier than
-others, it
-is easy to combine forces to develop new/better methods for any of them.
-We also have an interest in discovering more specific information of
-existing
-systems and getting up-to-date in the area of intelligent transportation
-systems.
-% end from proposal
 
 \section{Experiment}\label{sec:experiment}
 
