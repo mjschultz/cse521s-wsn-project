@@ -47,6 +47,27 @@ class LotPage(webapp.RequestHandler) :
         self.redirect('/lot/')
 
 class LotHandler(webapp.RequestHandler) :
+    def show_json(self, spaces, lot) :
+        if lot.geo_point :
+            geo_pt = lot.geo_point.location
+            geo_point = str(geo_pt.lat)+','+str(geo_pt.lon)
+        else :
+            geo_point = None
+
+        spaces_out = []
+        for s in spaces :
+            space_out = {}
+            space_out['space_id'] = s.key().name()
+            space_out['is_empty'] = s.is_empty
+            space_out['extra_info'] = s.extra_info
+            space_out['timestamp'] = time.mktime(s.timestamp.timetuple())
+            spaces_out.append(space_out)
+        json_out = {'lot_id':lot.key().name(),
+                    'geo_pt':geo_point,
+                    'timestamp':time.mktime(lot.timestamp.timetuple()),
+                    'spaces':spaces_out}
+        self.response.out.write(json.dumps(json_out))
+
     def get(self, lot_id, type) :
         (spaces, lot) = controller.getSpaces(lot_id)
         if lot == None :
@@ -65,6 +86,10 @@ class LotHandler(webapp.RequestHandler) :
             view = 'html'
         else :
             view = type.strip('/.')
+
+        if view == 'json' :
+            self.show_json(spaces, lot)
+            return
         
         if lot.geo_point :
             geo_pt = lot.geo_point.location
@@ -94,21 +119,7 @@ class LotHandler(webapp.RequestHandler) :
         if self.request.get('nomap') == 'true' :
             values['nomap'] = True
 
-        if view == 'json' :
-            spaces_out = []
-            for s in spaces :
-                space_out = {}
-                space_out['space_id'] = s.key().name()
-                space_out['is_empty'] = s.is_empty
-                space_out['extra_info'] = s.extra_info
-                space_out['timestamp'] = time.mktime(s.timestamp.timetuple())
-                spaces_out.append(space_out)
-            json_out = {'lot_id':lot_id,
-                        'geo_pt':geo_point,
-                        'timestamp':time.mktime(lot.timestamp.timetuple()),
-                        'spaces':spaces_out}
-            self.response.out.write(json.dumps(json_out))
-        elif view == 'html' :
+        if view == 'html' :
             path = os.path.join(base_path, 'templates/lot.html')
             self.response.out.write(template.render(path, values))
         else :
