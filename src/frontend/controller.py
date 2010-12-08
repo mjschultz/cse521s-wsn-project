@@ -21,6 +21,25 @@ def makeLot(lot_id, space_count, lat, lon) :
     lot.unknown_count = space_count
     lot.put()
 
+def viewRange(lot_id, min_datetime=None, max_datetime=None) :
+	lot = ParkingLot.get_by_key_name(lot_id)
+	log = LotLog.all()
+	log.filter('lot =', lot)
+	if min_datetime :
+		log.filter('timestamp >=', min_datetime)
+	if max_datetime :
+		log.filter('timestamp <=', max_datetime)
+
+	my_log = []
+	min_time = min_datetime.time()
+	max_time = max_datetime.time()
+	for e in log :
+		e_time = e.timestamp.time()
+		print min_time, e_time, max_time
+		if min_time <= e_time <= max_time :
+			my_log.append(e)
+	return my_log
+
 def getSpaces(lot_id) :
     lot = ParkingLot.get_by_key_name(lot_id)
     spaces = ParkingSpace.all()

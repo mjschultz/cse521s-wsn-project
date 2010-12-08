@@ -4,6 +4,7 @@ import controller
 import geo.geotypes
 from model import ParkingLot, ParkingSpace, LotGeoPoint
 import os.path
+from datetime import datetime, time
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -142,3 +143,52 @@ class LotHandler(webapp.RequestHandler) :
         else :
             self.response.set_status(400)
 
+class ChartPage(webapp.RequestHandler) :
+    def get(self) :
+        lots = ParkingLot.all()
+        lots.order('-timestamp')
+
+        values = {
+            'title': 'Parking Lots',
+            'lots': lots,
+        }
+        path = os.path.join(base_path, 'templates/chart_main.html')
+        self.response.out.write(template.render(path, values))
+
+class ChartHandler(webapp.RequestHandler) :
+	def get(self, lot_id, type) :
+		path = os.path.join(base_path, 'templates/chart.html')
+		values = {}
+		self.response.out.write(template.render(path, values))
+
+	def post(self, lot_id, type) :
+		min_date = self.request.get('mindate')
+		max_date = self.request.get('maxdate')
+		min_hour = self.request.get('minhour')
+		min_minute = self.request.get('minminute')
+		max_hour = self.request.get('maxhour')
+		max_minute = self.request.get('maxminute')
+
+		if min_date != '' :
+			min_datetime = datetime.strptime(min_date, '%m/%d/%Y')
+		else :
+			min_datetime = datetime.min
+		if max_date != '' :
+			max_datetime = datetime.strptime(max_date, '%m/%d/%Y')
+		else :
+			max_datetime = datetime.max
+
+		min_time = time(int(min_hour), int(min_minute))
+		max_time = time(int(max_hour), int(max_minute))
+		if int(max_hour) == 0 and int(max_minute) == 0 :
+			# special case, we want end-of-day
+			max_time = time.max
+		min_datetime = datetime.combine(min_datetime.date(), min_time)
+		max_datetime = datetime.combine(max_datetime.date(), max_time)
+
+		# controller query
+		log = controller.viewRange(lot_id, min_datetime, max_datetime)
+
+		values = {'min_date':min_date, 'max_date':max_date, 'log':log}
+		path = os.path.join(base_path, 'templates/chart.html')
+		self.response.out.write(template.render(path, values))

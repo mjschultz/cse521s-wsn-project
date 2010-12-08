@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+<ul>
+	{% for lot in lots %}
+    <li><a href="/chart/{{ lot.lot_id }} ">{{ lot.lot_id }}</a></li>
+	{% endfor %}
+</ul>
+{% endblock content %}

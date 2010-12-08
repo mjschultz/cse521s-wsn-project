@@ -9,6 +9,8 @@ pages = [
     ('/', views.MainPage),
     ('/lot/?', views.LotPage),
     ('/lot/([A-Za-z0-9-_]+)(/.*)?', views.LotHandler),
+    ('/chart/?', views.ChartPage),
+    ('/chart/([A-Za-z0-9-_]+)(/.*)?', views.ChartHandler),
 ]
 
 application = webapp.WSGIApplication(pages, debug=True)
