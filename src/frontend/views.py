@@ -4,7 +4,7 @@ import controller
 import geo.geotypes
 from model import ParkingLot, ParkingSpace, LotGeoPoint
 import os.path
-from datetime import datetime, time
+from datetime import datetime, time as dttime
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -178,11 +178,11 @@ class ChartHandler(webapp.RequestHandler) :
 		else :
 			max_datetime = datetime.max
 
-		min_time = time(int(min_hour), int(min_minute))
-		max_time = time(int(max_hour), int(max_minute))
+		min_time = dttime(int(min_hour), int(min_minute))
+		max_time = dttime(int(max_hour), int(max_minute))
 		if int(max_hour) == 0 and int(max_minute) == 0 :
 			# special case, we want end-of-day
-			max_time = time.max
+			max_time = dttime.max
 		min_datetime = datetime.combine(min_datetime.date(), min_time)
 		max_datetime = datetime.combine(max_datetime.date(), max_time)
 
