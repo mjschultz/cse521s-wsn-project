@@ -7,25 +7,6 @@
 		$( "#maxdate" ).datepicker();
 	});
 </script>
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-<script type="text/javascript">
-var json = {
-cols:[{id:'time',label:'Time',type:'datetime'},
-  {id:'usage',label:'Parking Space Use',type:'number'}],
-rows: [
-{% for e in log %}{c:[{v:new Date({{ e.timestamp|date:"Y,m-1,d,H,i,s" }})}, {v:{{ e.full_count }}}]},{% endfor %}
-]};
-</script>
-<script type="text/javascript">
-	google.load('visualization','1',{packages: ['annotatedtimeline']});
-	function drawVisualization() {
-		var data = new google.visualization.DataTable(json, 0.5);
-		var annotatedtimeline = new google.visualization.AnnotatedTimeLine(
-												document.getElementById('viz'));
-		annotatedtimeline.draw(data, {'dateFormat':'HH:mm:ss','displayZoomButtons':false});
-	}
-	google.setOnLoadCallback(drawVisualization);
-</script>
 {% endblock head %}
 {% block content %}
 <h2>Chart Lot Usage</h2>
@@ -87,6 +68,11 @@ rows: [
 	</fieldset>
 	<input type="submit" name="submit" value="Submit" />
 </form>
+{% if buckets %}
 <hr />
-<div id="viz" style="margin:0 auto;width:95%;height:300px;"></div>
+<p style="text-align:center;">
+<img src="http://chart.apis.google.com/chart?chxl=1:{% for bucket in buckets %}|{{ bucket.label|date:"H:i" }}{% endfor %}&chxr=0,0,{{ max_count }}&chxs=0,676767,11.5,-1,l,676767&chxt=y,x&chbh=a,4,9&chs=600x225&cht=bvg&chco=A2C180&chds=0,{{ max_count }}&chd=t:{% for bucket in buckets %}{{ bucket.average }}{% if not forloop.last  %},{% endif %}{% endfor %}&chma=0,0,0,7&chtt=Usage for {{ lot_id }}" />
+</p>
+{% endif %}
+
 {% endblock content %}

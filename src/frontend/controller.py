@@ -5,6 +5,7 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
+from datetime import datetime, timedelta
 
 def makeLot(lot_id, space_count, lat, lon) :
     lot = ParkingLot(key_name=lot_id)
@@ -21,7 +22,7 @@ def makeLot(lot_id, space_count, lat, lon) :
     lot.unknown_count = space_count
     lot.put()
 
-def viewRange(lot_id, min_datetime=None, max_datetime=None) :
+def viewRange(lot_id, min_datetime=None, max_datetime=None, nbuckets=15) :
 	lot = ParkingLot.get_by_key_name(lot_id)
 	log = LotLog.all()
 	log.filter('lot =', lot)
@@ -30,15 +31,35 @@ def viewRange(lot_id, min_datetime=None, max_datetime=None) :
 	if max_datetime :
 		log.filter('timestamp <=', max_datetime)
 
-	my_log = []
+	buckets = [{'count':0,'n':0,'min':None,'max':None} for i in range(nbuckets)]
 	min_time = min_datetime.time()
 	max_time = max_datetime.time()
+	min_dt = datetime.combine(datetime.now(), min_time)
+	max_dt = datetime.combine(datetime.now(), max_time)
+	td = max_dt - min_dt
+	delta = td / nbuckets
+	delta = delta.seconds
 	for e in log :
 		e_time = e.timestamp.time()
-		print min_time, e_time, max_time
+		e_dt = datetime.combine(datetime.now(), e_time)
 		if min_time <= e_time <= max_time :
-			my_log.append(e)
-	return my_log
+			d = e_dt - min_dt
+			t = d.seconds / delta
+			bucket = buckets[t]
+			bucket['count'] += e.full_count
+			bucket['n'] += 1
+			if bucket['min'] == None or bucket['min'] > e.full_count :
+				bucket['min'] = e.full_count
+			if bucket['max'] == None or bucket['max'] < e.full_count :
+				bucket['max'] = e.full_count
+
+	for (i, b) in enumerate(buckets) :
+		if b['n'] != 0 :
+			b['average'] = b['count']/b['n']
+		else :
+			b['average'] = 0
+		b['label'] = min_dt + timedelta(seconds=delta*i)
+	return buckets
 
 def getSpaces(lot_id) :
     lot = ParkingLot.get_by_key_name(lot_id)

@@ -187,8 +187,10 @@ class ChartHandler(webapp.RequestHandler) :
 		max_datetime = datetime.combine(max_datetime.date(), max_time)
 
 		# controller query
-		log = controller.viewRange(lot_id, min_datetime, max_datetime)
+		buckets = controller.viewRange(lot_id, min_datetime, max_datetime)
+		max_count = max(e['average'] for e in buckets)
 
-		values = {'min_date':min_date, 'max_date':max_date, 'log':log}
+		values = {'min_date':min_date, 'max_date':max_date,
+				'buckets':buckets, 'max_count':max_count, 'lot_id':lot_id}
 		path = os.path.join(base_path, 'templates/chart.html')
 		self.response.out.write(template.render(path, values))
