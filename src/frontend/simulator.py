@@ -61,6 +61,7 @@ while simulating :
         spaces.append(space)
 
     host.request('PUT', '/lot/'+lotname, json.dumps(spaces))
+    print json.dumps(spaces)
     resp = host.getresponse()
     print resp.read()
     for space in spaces :
