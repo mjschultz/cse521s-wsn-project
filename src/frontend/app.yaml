@@ -8,5 +8,7 @@ handlers:
   script: media/usage.py
 - url: /media/js/
   static_dir: media/js/
+- url: /media/css/
+  static_dir: media/css/
 - url: /.*
   script: main.py

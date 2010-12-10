@@ -4,6 +4,7 @@ import controller
 import geo.geotypes
 from model import ParkingLot, ParkingSpace, LotGeoPoint
 import os.path
+from datetime import datetime, time as dttime
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -47,6 +48,27 @@ class LotPage(webapp.RequestHandler) :
         self.redirect('/lot/')
 
 class LotHandler(webapp.RequestHandler) :
+    def show_json(self, spaces, lot) :
+        if lot.geo_point :
+            geo_pt = lot.geo_point.location
+            geo_point = str(geo_pt.lat)+','+str(geo_pt.lon)
+        else :
+            geo_point = None
+
+        spaces_out = []
+        for s in spaces :
+            space_out = {}
+            space_out['space_id'] = s.key().name()
+            space_out['is_empty'] = s.is_empty
+            space_out['extra_info'] = s.extra_info
+            space_out['timestamp'] = time.mktime(s.timestamp.timetuple())
+            spaces_out.append(space_out)
+        json_out = {'lot_id':lot.key().name(),
+                    'geo_pt':geo_point,
+                    'timestamp':time.mktime(lot.timestamp.timetuple()),
+                    'spaces':spaces_out}
+        self.response.out.write(json.dumps(json_out))
+
     def get(self, lot_id, type) :
         (spaces, lot) = controller.getSpaces(lot_id)
         if lot == None :
@@ -65,6 +87,10 @@ class LotHandler(webapp.RequestHandler) :
             view = 'html'
         else :
             view = type.strip('/.')
+
+        if view == 'json' :
+            self.show_json(spaces, lot)
+            return
         
         if lot.geo_point :
             geo_pt = lot.geo_point.location
@@ -94,21 +120,7 @@ class LotHandler(webapp.RequestHandler) :
         if self.request.get('nomap') == 'true' :
             values['nomap'] = True
 
-        if view == 'json' :
-            spaces_out = []
-            for s in spaces :
-                space_out = {}
-                space_out['space_id'] = s.key().name()
-                space_out['is_empty'] = s.is_empty
-                space_out['extra_info'] = s.extra_info
-                space_out['timestamp'] = time.mktime(s.timestamp.timetuple())
-                spaces_out.append(space_out)
-            json_out = {'lot_id':lot_id,
-                        'geo_pt':geo_point,
-                        'timestamp':time.mktime(lot.timestamp.timetuple()),
-                        'spaces':spaces_out}
-            self.response.out.write(json.dumps(json_out))
-        elif view == 'html' :
+        if view == 'html' :
             path = os.path.join(base_path, 'templates/lot.html')
             self.response.out.write(template.render(path, values))
         else :
@@ -131,3 +143,54 @@ class LotHandler(webapp.RequestHandler) :
         else :
             self.response.set_status(400)
 
+class ChartPage(webapp.RequestHandler) :
+    def get(self) :
+        lots = ParkingLot.all()
+        lots.order('-timestamp')
+
+        values = {
+            'title': 'Parking Lots',
+            'lots': lots,
+        }
+        path = os.path.join(base_path, 'templates/chart_main.html')
+        self.response.out.write(template.render(path, values))
+
+class ChartHandler(webapp.RequestHandler) :
+	def get(self, lot_id, type) :
+		path = os.path.join(base_path, 'templates/chart.html')
+		values = {}
+		self.response.out.write(template.render(path, values))
+
+	def post(self, lot_id, type) :
+		min_date = self.request.get('mindate')
+		max_date = self.request.get('maxdate')
+		min_hour = self.request.get('minhour')
+		min_minute = self.request.get('minminute')
+		max_hour = self.request.get('maxhour')
+		max_minute = self.request.get('maxminute')
+
+		if min_date != '' :
+			min_datetime = datetime.strptime(min_date, '%m/%d/%Y')
+		else :
+			min_datetime = datetime.min
+		if max_date != '' :
+			max_datetime = datetime.strptime(max_date, '%m/%d/%Y')
+		else :
+			max_datetime = datetime.max
+
+		min_time = dttime(int(min_hour), int(min_minute))
+		max_time = dttime(int(max_hour), int(max_minute))
+		if int(max_hour) == 0 and int(max_minute) == 0 :
+			# special case, we want end-of-day
+			max_time = dttime.max
+		min_datetime = datetime.combine(min_datetime.date(), min_time)
+		max_datetime = datetime.combine(max_datetime.date(), max_time)
+
+		# controller query
+		buckets = controller.viewRange(lot_id, min_datetime, max_datetime)
+		max_count = max(e['average'] for e in buckets)
+
+		values = {'min_date':min_date, 'max_date':max_date,
+				'buckets':buckets, 'max_count':max_count, 'lot_id':lot_id}
+		path = os.path.join(base_path, 'templates/chart.html')
+		self.response.out.write(template.render(path, values))
