@@ -208,17 +208,87 @@ existing systems and getting up-to-date in the area of intelligent
 transportation systems.
 % end from proposal
 
-
 \subsection{Aggregation Software}
 
-A paragraph laying out what Google AppEngine is, why we chose it, and what
-it does for us.
+Data leaving the base station of a parking lot is directed over then
+Internet to our aggregation software hosted on Google's
+AppEngine~\cite{google:appengine}.
+For this project, we decided the AppEngine environment was an appropriate
+choice for several reasons:
+\begin{itemize}
+	\item The service is free for light usage (testing and development).
+	\item It provides a Python programming environment.
+	\item Most importantly, it is designed to scale up with ease
+	transparently with large datasets.
+\end{itemize}
 
-A paragraph or two describing the AE backend and frontend(s).
+The nature of our project is to have one sensor per parking space in a
+parking lot for every parking lot.
+This implies that over time our backend must be able to accept, store, and
+recall large amounts of current and historical data.
+We could have sunk our resources into using a traditional server model for
+the purposes of a prototype, however if the project were to start scaling
+up great amounts we would start running into resource barriers.
+Google's AppEngine is designed to scale with demand, this is largely due to
+their use of a datastore built on top of Bigtable~\cite{google:bigtable}.
+Though transparent to users of our system, this non-SQL based datastore
+forced a few notable differences from a SQL based datastore.
 
-More detailed description of the underlying implementation (packet formats
-in the network, sending data to AppEngine, specific technology used on
-backend, any frontend stuff).
+First, while queries appear to be SQL, they are actually ``GQL,'' a
+SQL-like language.
+In general this does not bring any problems, but because of the
+organization of the datastore imprecise queries are not acceptable.
+You must know the data you are looking for.
+You cannot simple SELECT one or two columns from the datastore, rather you
+must get all the columns or a unique key identifier that matches the query.
+
+Second, its harder to perform proximity searches with the datastore because
+there is not concept of ``similar'' or ``like'' queries, you either know
+the data or don't know the data.
+However, with the help of the geomodel API~\cite{geomodel} we are able to
+use geohashing to perform proximity searches on the datastore.
+This is useful to locate nearby parking lots, allowing the end-user to
+identify other potential parking areas.
+
+With an understanding of the underlying technology, we are able to present
+an easy to use API.
+
+\subsubsection{A RESTful API}
+
+REpresentational State Transfer (REST) is an abstract model for building
+large-scale web services~\cite{pautasso:restful}.
+The principles of a RESTful architecture are an identification of resources
+through a URI, a ``pure'' HTTP interface, and self-contained hyperlinks.
+In this section we describe how we achieved these principles.
+
+Our URI scheme is straight-forward.
+Each lot is given a unique identification consisting of alphanumerics and
+the underscore (\_) character.
+When attempting to access a specific lot, that identifier is part of the
+URI (i.e.,
+\texttt{http://<host>/lot/wustl\_millbrook/}
+identifies the Milbrook lot on Washington University's campus).
+
+Any request concerning this lot must go through its URI.
+Requests use one of the HTTP verbs of \texttt{GET}, \texttt{PUT}, or
+\texttt{POST}.
+A \texttt{GET} request simply returns the information for the requested URI
+in either the HTML or JSON format.
+A \texttt{PUT} request attempts to store updated status information to the
+lot.
+This request contains the list of parking spaces to update, their
+identification and status, as well as any associated meta-information that
+should be put in the datastore.
+Finally, a \texttt{POST} request handles the creation of new parking lots.
+
+With the API in place, we are able to create rich applications with ease
+for expansion and integration into other software.
+As a demonstration, we build up a web-based frontend in the next section
+that takes advantage of our API.
+
+\subsubsection{Web Frontend}
+
+Explanation of the frontend will go here.
 
 \section{Experiment}\label{sec:experiment}
 
