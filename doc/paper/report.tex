@@ -26,6 +26,19 @@
 \maketitle
 
 \begin{abstract}
+The Internet, in its current form, provides up to the minute updates on
+traffic conditions and can provide motorists with detailed mapping and
+directions for nearly any destination.
+However, once the driver arrives at their destination, they must wander and
+search for a parking space, wasting fuel and time, as well as causing
+traffic buildups and unnecessary expulsion of greenhouse gasses.
+By introducing Wireless Sensor Networks (WSN) into the process, drivers can
+be provided with up to the minute updates about parking at a frequency and
+cost lower than current implementations.
+Currently, expensive induction loops or other, more permanent systems must
+be installed, typically only at the entrance and exit to a parking
+structure.
+	
 ``Intelligent Transportation Systems'' (ITS) are a mix of systems that
 gather various data metrics from transportation areas (parking lots,
 streets, alleyways, etc.), aggregate this data together, and present
@@ -368,7 +381,25 @@ a much greater chance of easily finding a parking space.
 
 \section{Experiment}\label{sec:experiment}
 
-Paragraph about experiments that show our system works.
+Since our system was split into two major components, we were able to test
+both somewhat independently. 
+The first component included physically sensing the vehicle and relaying
+the data to the backend.
+The second component involved testing the backend works for extended
+periods of time and correctly logs/recalls historical data.
+
+\subsection{Sensing and Sending}
+
+Discussion of how sensing and sending was tested
+
+\subsection{Backend and Frontend}
+
+Discussion of how the simulator tested the backend and any problems that
+arose from it.
+% Couldn't really test large scale deployment of sensor backend since we
+% had limited resources with respect to actual motes, funds to purchase
+% sonar sensors, building containers to house the sensors overnight, and
+% the ability to gather data over an extended period of time.
 
 \section{Related Work}\label{sec:related}
 
@@ -427,7 +458,6 @@ in more detail again.
 
 Conclusions from this project.
 
-% \section{References}
 \bibliographystyle{abbrv}
 \bibliography{report}
 
