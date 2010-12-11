@@ -115,23 +115,27 @@ In short, we plan to answer the following questions:
 	simple-to-interpret content?
 \end{itemize}
 
-% from proposal
-%To achieve these goals, we intend to use the Tmote Sky/TelosB mote platform
-%which have an expansion connector that allows external sensors to be
-%connected.
-%To reduce installation costs, we will use a multi-hop routing protocol
-%(likely the collection tree protocol) to communicate data from a sensor to
-%the base station.
-%This allows for a large number of sensors to be deployed with little effort
-%or physical infrastructure to be in place.
-%Finally, once the data is aggregated at a central location it must be
-%displayed to the end user in an easy to read/interpret interface.
-%This is important because the vehicle operator needs to have a quick,
-%intuitive knowledge of where to go, so they don't cause physical
-%congestion.
-%We also wish to monitor the duration of parking space use, to allow a
-%parking attendant to be notified when a person has overused their space.
-% end from proposal
+Our goals for the hardware involve prototyping a low cost, wireless system
+which can function with a heterogeneous sensor suite.
+This will be accomplished by using sensors with generic connection ports,
+allowing for customizing the system to different sensor methods with ease.
+Also, using
+the built in sensors on the motes, we plan to provide drivers with more
+advanced feedback than is traditional in parking structures, such as
+headlight detection.
+Lastly, our project will be adaptable for any current parking structure.
+Therefore, it must make use of the wireless capabilities of the mote
+platform, reducing the installation cost by negating the need for expensive
+wiring.
+
+Once our system has been installed, we plan to aggregate the data at a base
+station, located within the parking structure, which handles interactions
+between the WSN and the cloud.
+Communication between the base station and the network will rely upon
+Collection Tree Protocol (CTP), a robust method of point-to-sink wireless
+communication.
+Our base station then communicates with a computer via serial port, which
+forwards the data to the cloud.
 
 \section{Design}\label{sec:design}
 
@@ -262,6 +266,22 @@ URI (i.e.,
 \texttt{http://<host>/lot/wustl\_millbrook/}
 identifies the Milbrook lot on Washington University's campus).
 
+\begin{figure}
+    \begin{verbatim}
+[
+  {
+    "space_id": 8,
+    "is_empty": false,
+    "magnet": 218,
+    "sonar": 114
+  },
+  ...
+]
+\end{verbatim}
+	\caption{Client to server JSON data.}
+	\label{fig:clientserverjson}
+\end{figure}
+
 Any request concerning this lot must go through its URI.
 Requests use one of the HTTP verbs of \texttt{GET}, \texttt{PUT}, or
 \texttt{POST}.
@@ -271,7 +291,8 @@ A \texttt{PUT} request attempts to store updated status information to the
 lot.
 This request contains the list of parking spaces to update, their
 identification and status, as well as any associated meta-information that
-should be put in the datastore.
+should be put in the datastore, an example of this can be seen in
+Figure~\ref{fig:clientserverjson}.
 Finally, a \texttt{POST} request handles the creation of new parking lots.
 
 With the API in place, we are able to create rich applications with ease
@@ -279,9 +300,71 @@ for expansion and integration into other software.
 As a demonstration, we build up a web-based frontend in the next section
 that takes advantage of our API.
 
-\subsubsection{Web Frontend}
+\subsubsection{Frontend}
 
-Explanation of the frontend will go here.
+\begin{figure}
+    \begin{verbatim}
+{
+  "lot_id": "wustl_snowway",
+  "geo_pt": "38.650233,-90.313529",
+  "timestamp": 1291946695.0
+  "spaces":
+  [
+    {
+      "space_id": "4",
+      "is_empty": false,
+      "timestamp": 1291946695.0,
+      "extra_info": "sonar:55;magnet:201;"
+    },
+    ...
+  ]
+}
+\end{verbatim}
+	\caption{Server to client JSON data.}
+	\label{fig:serverclientjson}
+\end{figure}
+
+As mentioned above, a \texttt{GET} request on the parking lot identifier
+will result in either a HTML or JSON response.
+An example of the JSON response can be seen in
+Figure~\ref{fig:serverclientjson}.
+The response provides enough information to a client application to
+identify the name of the lot, its location, the time of the most recent
+activity, and the list of spaces.
+Each space has a unique identifier, the status of that spot (full or
+empty), the time it was last updated, and any additional information about
+that spot (likely to be sensor readings at the last report).
+A client can combine this information with a virtual representation of the
+lot's topography, then keep that representation up-to-date by periodically
+querying the server for new information.
+
+For our project, we've also built an HTML interface for viewing the
+information on a lot.
+Once a lot is selected by the user, our interface provides a map of the
+area surrounding the lot with markers indicating other lots in a two mile
+radius.
+It also displays a ``health'' indicator giving an approximate empty-to-full
+ratio, as well as a list of spaces that are filled and how long they've
+been filled.
+
+\begin{figure}
+    \begin{center}
+		\includegraphics[width=\columnwidth]{figures/fullness-chart}
+	\end{center}
+	\caption{Example of a usage chart for the 5:30am--7:00am time slot.}
+	\label{fig:fullness-chart}
+\end{figure}
+
+Additionally, by keeping a log of changes to a lot on the backend, we are
+able to provide a chart to indicate the average fullness of a lot over a
+time frame.
+For example, Figure~\ref{fig:fullness-chart} shows the average fullness of
+the ``DUC'' lot from 5:30am until 7:00am.
+At the 6:06am time slot there are 11 spaces being used, however only 20
+minutes earlier only 6 spaces are being used.
+Having access to this information would allow a daily commuter, or one time
+visitor, discover that by arriving only 20 minutes earlier they would have
+a much greater chance of easily finding a parking space.
 
 \section{Experiment}\label{sec:experiment}
 
@@ -289,9 +372,12 @@ Paragraph about experiments that show our system works.
 
 \section{Related Work}\label{sec:related}
 
-We are aware of two systems that target per-spot granularity.
-The first, Signal-Park, uses sonar sensors above each parking spot to
-detect the presence of a vehicle~\cite{pgi:signal-park}.
+There are other proposals and existing systems for parking guidance and
+information, here we'll discuss and differentiate ourselves from these
+systems.
+
+Signal-Park, uses sonar sensors above each parking spot to detect the
+presence of a vehicle~\cite{pgi:signal-park}.
 Approximately three times per second, the sensor is queried to determine
 vehicle presences and updates a central computer.
 This system uses serial lines to connect each sensor with the central
@@ -302,8 +388,8 @@ It would certainly be possible to improve the connectivity of this system
 to integrate with our back-end aggregation system to take advantage of
 existing installations.
 
-The other system, Streetline, is a startup in the San Francisco area
-that similarly uses a wireless mesh network to link all the sensors
+Streetline, is a startup in the San Francisco area that similarly uses a
+wireless mesh network to link all the sensors
 together~\cite{pgi:streetline}.
 The Streetline system has recently (Summer 2010) begun to roll out sensors
 and upgraded meters for select areas in the San Francisco
@@ -319,6 +405,18 @@ system and their system should be able to integrate with little effort and
 could be seen as competitors.
 We view this a positive, as it demonstrates that our project is a useful
 idea with potential buyers available.
+
+There has also been a proposal to use existing security cameras with a view
+of a parking lot to detect vehicular presence~\cite{lin:vision-parking}.
+The results of their experiment, while decent for their scenario, seem
+unlikely to generalize to other systems.
+While it may be true that some lots have existing surveillance cameras, the
+paper also observes that cameras should be mounted higher for a more
+consistent and complete view of the lot.
+This goes against their principal of using existing cameras for the
+information, since additional cameras would have to be mounted to perform
+correctly (moving security cameras further from the observation area is
+probably not acceptable to the security officers).
 
 \section{Lessons Learned}\label{sec:lessons}
 
