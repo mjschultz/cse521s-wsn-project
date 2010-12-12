@@ -280,24 +280,23 @@ We are now free to discuss the specifics of our hardware sensing platform
 and our web application that presents the data.
 
 \subsection{Hardware}
-When choosing the hardware for our PGI system we had specific goals in
-mind.  The system needed to be low-cost, reliable, power efficient, and
-easily customized to meet the needs of the specific structure or lot.
-We believe most potential business would come from upgrading existing
-parking structures versus that of new construction.
-Depending on there environment, some sensors may work better than others
-but the best sensor for a particularity environment still may not be the
-best choice for the entire system.
-Take for example an induction loop sensor, these are typically the
-best sensor for detecting the presence of a vehicle but in an pre-existing
-structure you must cut into the floor of every parking space to add them, a
-costly procedure.
-This is why it is necessary for the system to be easily customized and it
-is likely the most important requirement for the successful adoption of our
-system by the parking industry.
-When adding an inductive loop system, the installation cost is typically
-more prohibitive than that of the PGI system.
-Using wireless technology and supporting many different sensor types and
+
+When choosing the hardware for our PGI system we had specific goals in mind.
+The system must be low-cost, reliable, power efficient, and easily
+customized to meet the needs of the specific structure or parking lot.
+A primary focus of this system is to upgrade existing parking structures, not just add it to new construction.
+Therefore our system must be capable of customizing sensors for different
+environments.
+
+For example, an induction loop sensor is typically the best sensor for
+detecting the presence of a vehicle, but in a pre-existing structure you
+must cut into the ﬂoor of every parking space to add them, a costly
+procedure.
+When adding an inductive loop system, the installation cost is more prohibitive
+than that of the PGI system.
+This customization is likely the most important requirement for the successful
+adoption of our system by the parking industry.
+By using wireless technology and supporting many different sensor types and
 configurations we believe we can successfully implement this system in both
 pre-existing and new parking structures.
 
@@ -336,10 +335,10 @@ structures.
 
 \begin{figure}
     \begin{center}
-		\includegraphics[width=\columnwidth]{figures/range_finder}
+		\includegraphics[height=1.5in]{figures/range_finder}
 	\end{center}
 	\caption{LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}
-	by MaxBotix\textsuperscript{\textregistered} (``EZ1'').}
+	by MaxBotix\textsuperscript{\textregistered} (hereafter ``EZ1'').}
 	\label{fig:range_finder}
 \end{figure}
 
@@ -364,7 +363,7 @@ environment~\cite{maxbotix:maxsonar-datasheet}.
 A MacBook Pro was used as the base-station in this project.
 However, keeping with our theme of low-cost, we kept the
 requirements of the base station to a minimum by only using features found
-in any low-end Unix/Linux computer.
+in any low-end Unix or Linux computer.
 The only requirements of the base station are that it be capable of
 connecting to the Internet and that it provides a USB connection.
 Because video is not a requirement, we would recommend a small, power
@@ -416,7 +415,7 @@ it would function well within our project.
 \subsubsection{Base Station}
 
 The base station software has multiple functions.  It was written in C so
-as to be compatible with most current versions of Unix/Linux.
+as to be compatible with most current versions of Unix or Linux.
 It is responsible for configuring the PSMs, monitoring their status, collecting data from them, and sending the collected data to the aggregation software over the Internet.
 
 Since the base station needs to communicate with the motes over IEEE
@@ -508,7 +507,8 @@ a parking space.
 Since our system was split into two major components, we were able to test
 both somewhat independently. 
 The first component included physically sensing the vehicle and relaying
-the data to the backend.
+the data to the backend~\footnote{A video is available at
+\url{http://www.youtube.com/watch?v=cE2xn1PHDlI}.}.
 The second component involved testing the backend works for extended
 periods of time and correctly logs/recalls historical data.
 
