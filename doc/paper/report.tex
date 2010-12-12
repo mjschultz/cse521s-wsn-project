@@ -447,9 +447,9 @@ Sensing and sending from the Parking Space Monitors to the base-station to the
 	\label{fig:parking_sensor}
 \end{figure}
 
-Testing of the sensing and sending was extensive.  
+A great deal of testing was performed on the sensing and sending portion of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space Monitor mounted on a tripod 
 
-Voltage rangefinder 
+It was through this testing that we found the issues with the range of our Parking Space Monitors.  The EZ1 claims to support a distance up to 254-inches, however we were only able to detect a vehicle   The EZ1 range finder will support a supply voltage of 2.5V - 5.5V.  The EZ1 is powered by the TelosB analog supply of ~3.1V.  
 
 \subsection{Backend and Frontend}
 
@@ -509,6 +509,8 @@ correctly (moving security cameras further from the observation area is
 probably not acceptable to the security officers).
 
 \section{Lessons Learned}\label{sec:lessons}
+
+If we were to pursue this project into the future we would probably modify the design of the sensor placement.
 
 Anything we would have done differently if we were to pursue this project
 in more detail again.
