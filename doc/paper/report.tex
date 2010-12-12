@@ -26,21 +26,25 @@
 \maketitle
 
 \begin{abstract}
-The Internet, in its current form, provides up to the minute updates on
-traffic conditions and can provide motorists with detailed mapping and
-directions for nearly any destination.
-However, once the driver arrives at their destination, they must wander and
-search for a parking space, wasting fuel and time, as well as causing
-traffic buildups and unnecessary expulsion of greenhouse gasses.
-By introducing Wireless Sensor Networks (WSN) into the process, drivers can
-be provided with up to the minute updates about parking at a frequency and
-cost lower than current implementations.
-Currently, expensive induction loops or other, more permanent systems must
-be installed, typically only at the entrance and exit to a parking
-structure.
-	
-``Intelligent Transportation Systems'' (ITS) are a mix of systems that
-gather various data metrics from transportation areas (parking lots,
+The Internet is able to provide up to the minute updates on traffic
+conditions and provide motorists with detailed mapping and directions for
+nearly any destination.
+However, once a driver arrives at their destination, they must still
+search for a parking space.
+This wastes fuel and time, as well as causing traffic buildup and
+contributing to the urban heat island effect.
+We believe that Wireless Sensor Networks (WSN) can be used to aide in these
+problems.
+Drivers would be able to access up to the minute information about parking
+from their home computer or smart phone.
+Our system can provide high frequency updates for, we believe, a cost lower
+than current implementations.
+Most commonly, expensive induction loops or other, more permanent systems
+must be installed, and only provide entrance and exit information for
+parking structure.
+
+Modern ``Intelligent Transportation Systems'' (ITS) are a mix of systems
+that gather various data metrics from transportation areas (parking lots,
 streets, alleyways, etc.), aggregate this data together, and present
 coherent information to the end-users of the system.
 Orchestrating such a system presents several challenges at each level.
@@ -53,51 +57,61 @@ Guidance and Information'' (PGI) system for TinyOS.
 \end{abstract}
 
 \section{Introduction}
+When Tim Berners-Lee introduced the World Wide Web to the world in 1991, he
+commented that,
+\begin{quote}
+``[The World Wide Web] could start a revolution in information
+access.''
+\end{quote}
+In the past 20 years there has been a huge wealth of information placed
+online for anyone to access anywhere.
+The revolution is just beginning however, there is still an incredible
+amount of ``now'' information that simply isn't available online yet.
+We want to use wireless sensor networks in order to push more ``now''
+information online, in this project we target parking lot data to simplify
+a driver's life when traveling.
 
 Driving to new destinations always brings some level of stress and
 uncertainty.
-Where am I going, what do the roads and intersections look like, what side
-of the road is the place on, where do I park?
-These are all questions that dart through the brain when beginning to think
-about going some place new.
-Luckily, maps bring us the answer or at least a partial answer to some of
-those questions.
+Questions like: where am I going, what do the roads and intersections look
+like, what side of the road is the place on, and where do I park are common
+when traveling to new locations.
+Luckily, mapping technology brings us the answers or at least partial
+answers to some of these questions.
 In the past decade there has been huge growth of web-based mapping
-technology to help answer these questions even more fully.
+technology, allowing these questions to be answered even more fully.
 For example, Google Maps allows you to get directions from point A to point
 B, and in the past 5 years has introduced Street
 View~\cite{vincent:streetview} to their interface.
-Street View allows a user to view the roads they will be travelling on from
+Street View allows a user to view the roads they will be traveling on from
 an in-car perspective.
 This removes much of the uncertainty when driving, leading to less
-confusion and a better experience (and potentially fewer accidents).
+confusion, a better experience, and potentially fewer accidents.
 
-However, there is still that can be done.
-Even after you've arrived at your destination you must find where to park.
-This can also be quite a hassle, as you are unfamiliar with the area and
-during peak hours there may not be a parking space in near proximity.
-To help in this matter, Parking Guidance and Information Systems (PGIS)
-allow drivers to quickly evaluate where best to go to find parking
-efficiently~\cite{sakai:pgi-toyota}.
-Traditional PGI Systems simply count the number of cars that enter and exit
-a designated area and display the number of spots available in that area to
-the driver.
-These systems are imprecise, costly, and can't be integrated with other
-technologies.
+However, there is still more that can be done.
+Once you've arrived at your destination you must find where to park.
+This can be a hassle for those unfamiliar with an area or
+during peak hours when there may not be a parking space nearby.
+Parking Guidance and Information Systems (PGIS) allow drivers to quickly
+evaluate where empty parking spaces may exist~\cite{sakai:pgi-toyota}.
+Traditional PGI Systems just count the number of cars that enter and exit a
+designated area, displaying the number of spots available in that area to a
+driver.
+These systems are imprecise, costly, and are difficult to integrate with
+other technologies.
 
-This paper presents our experiences building a parking guidance and
-information system using the TelosB/TinyOS platform.
-By using motes, it opens the possibility of deploying a single sensor for
-each available parking space allowing for much more detailed information
-about a parking lot as a whole.
+This paper presents our experiences building a PGI System on the
+TelosB/TinyOS platform.
+By using motes, it is possible to deploy a single sensor for each parking
+space allowing more detailed information about an entire parking lot.
 Moreover, with proper sheltering, these sensors can be mounted on the
 surface of a parking lot instead of cutting into the lot and installing an
 inductive loop to detect vehicle presence.
-We also take advantage of the wireless multi-hop routing abilities of
-TinyOS-based motes to avoid wiring and enable a heterogeneous mix of
-sensors to keep track of parking spot availability and usage data.
-Combining these aspects gives a system that can be more precise, lower
-cost, and more easily integrated with future technologies.
+We can also take advantage of the wireless multi-hop routing abilities of
+TinyOS-based motes to avoid costly wiring and enable a heterogeneous mix of
+sensors.
+Combining these aspects gives a system is able to be more precise, lower
+cost, and easily integrated with future technologies.
 
 The remainder of this paper is as follows.
 Section~\ref{sec:goals} defines the goals of this project more fully.
@@ -116,9 +130,9 @@ discussion of potential future work for this project.
 
 Since we believe other solutions to PGI Systems do not represent what
 modern technology is capable of, our goals for this project are to build a
-PGI System that can be easily deployed at a low-cost, aggregates the data
-at a single location, and integrates with user-facing technology to provide
-a rich experience.
+PGI System that can be easily deployed at a low-cost while aggregating the
+data to a single location and integrating it with user-facing technology to
+provide a rich user experience.
 In short, we plan to answer the following questions:
 \begin{itemize}
 	\item How do you gather parking data and at what granularity?
@@ -128,27 +142,26 @@ In short, we plan to answer the following questions:
 	simple-to-interpret content?
 \end{itemize}
 
-Our goals for the hardware involve prototyping a low cost, wireless system
-which can function with a heterogeneous sensor suite.
-This will be accomplished by using sensors with generic connection ports,
-allowing for customizing the system to different sensor methods with ease.
-Also, using
-the built in sensors on the motes, we plan to provide drivers with more
-advanced feedback than is traditional in parking structures, such as
-headlight detection.
-Lastly, our project will be adaptable for any current parking structure.
+Our goals for the hardware involve prototyping a low-cost, wireless system
+that functions with a heterogeneous sensor suite.
+This can be accomplished by using sensors with standard connection ports,
+allowing the system to be customized with different sensing methods.
+We can also take advantage of the built-in sensors to provide drivers
+with advanced feedback, such as headlight detection.
+Lastly, our project should be available for current parking structures to
+use.
 Therefore, it must make use of the wireless capabilities of the mote
-platform, reducing the installation cost by negating the need for expensive
+platform, reducing installation costs by removing the need for costly
 wiring.
 
-Once our system has been installed, we plan to aggregate the data at a base
-station, located within the parking structure, which handles interactions
-between the WSN and the cloud.
+Once our system is installed, we can collect the data at a base station,
+located at the parking structure, which will interact with both the WSN and
+the Internet.
 Communication between the base station and the network will rely upon
 Collection Tree Protocol (CTP), a robust method of point-to-sink wireless
 communication.
-Our base station then communicates with a computer via serial port, which
-forwards the data to the cloud.
+Our base station then communicates with a computer via USB and sends
+the data to the Internet.
 
 \section{Design}\label{sec:design}
 
@@ -164,178 +177,27 @@ forwards the data to the cloud.
 
 Figure~\ref{fig:high-level} shows a high-level view of the infrastructure
 of our PGI System.
-Our system begins with a parking lot (left side of
-Figure~\ref{fig:high-level}), each space in this lot is equipped with a
-sensor built on the TelosB/TinyOS platform.
-Data is collected at a per-lot base station, which then sends the data over
-the Internet to our backend.
+Our system begins with a parking lot with each space equipped by a sensor
+built on the TelosB/TinyOS platform.
+Data is collected at a base station and then sent over the Internet to our
+backend.
 When our backend receives the data it updates and logs the changes to the
 data store and organizes the lot information.
-Once the data is stored, clients are able to query the backend and get
-up-to-date information about a specific lot and lots in the vicinity.
+Once the data is stored, clients can query the backend, getting up to the
+minute information about a specific lot and lots in the vicinity.
 
-Building this system requires a fair amount of hardware and software
-knowledge and is described below.
+To present the system, we first introduce our API that ties the two major
+components (sensing and aggregation) together.
+Once the API is in place, we explain the hardware sensing design and then
+the aggregation and dissemination system.
 
-\subsection{Hardware}
-When choosing the hardware for our PGI system we had specific goals in mind.  The system would need to be low cost, reliable, power efficient, and easily customized to meet the needs of the specific structure/lot.  We believe most of our potential business would come from upgrading existing parking structures versus that of new construction.  Depending on there environment, some sensors may work better than others but the best sensor for a particularity environment still may not be the best choice for the system.  Take for example an induction loop sensor, these are typically the best sensor for detecting the presence of a vehicle but in an pre-existing structure it would prove to be very expensive to cut into the floor of every parking space to add them.  This is why it is necessary for the system to be easily customized and it is likely the most important requirement for the successful adoption of our system by the parking industry.  When adding a system such as this, it is typical for the installation cost to be more prohibitive than that of the PGI system.  By including wireless technology and supporting many different sensor types and configurations we believe we can successfully implement this system in both pre-existing and new parking structures.
-
-\subsubsection{Parking Space Monitors}
-
-The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They must be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit required data to a base-station for further processing.  For all these reasons we chose the Telos Revision B (TelosB) wireless sensor module as the base for our Parking Space Monitors.
-
-\begin{figure}
-    \begin{center}
-		\includegraphics[width=\columnwidth]{figures/telosb}
-	\end{center}
-	\caption{Telos Revision B.}
-	\label{fig:telosb}
-\end{figure}
-
-
-Shown in Figure~\ref{fig:telosb}, the TelosB provides a multitude of
-features and sensors, but still manages to use little power and support
-fast wireless communications.  We chose the TelosB because it includes a
-250 kbps IEEE 802.15.4 wireless transceiver; on-board temperature and light
-sensors; low power consumption; an on-board antenna; simple
-programming/collection interface; and a 10+6-pin expansion slot allowing
-analog, digital, or serial connections~\cite{moteiv:telosb}.
-% TODO was a itemized list, now it is integrated paragraph.
-
-The TelosB includes many different interfaces we could use 
-TODO **Finish describing the TelosB interface we could connect sensors to.  Such as analog, UART, I2C, Digital**
-
-\begin{figure}
-    \begin{center}
-		\includegraphics[width=\columnwidth]{figures/range_finder}
-	\end{center}
-	\caption{LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}
-	by MaxBotix\textsuperscript{\textregistered} (our ``sonar sensor'').}
-	\label{fig:range_finder}
-\end{figure}
-
-There are many different types of sensors that could have been used to
-monitor if a parking space is occupied or vacant.  These include infrared
-range finders, pressure sensors, and inductive sensors.
-We chose to use the
-LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}
-by MaxBotix\textsuperscript{\textregistered} (hereafter ``sonar sensor'')
-because of it's price and feature set~\cite{maxbotix:maxsonar-datasheet}.
-These include:
-\begin{itemize}
-	\item TODO **Clean up this List**
-	\item Supports supply voltage from 2.5V to 5.5V
-	\item Detects objects from 6 inches out to 254 inches with 1 inch
-	resolution (0-6 inches range as 6 inches)
-	\item Output formats include pulse width, analog voltage, and serial digital
-\end{itemize}
-
-\subsubsection{Base-Station}
-For ease of development a MacBook Pro was used as the base-station in this
-project.  However, keeping with our theme of low cost, we tried to keep the
-requirements of the base-station to a minimum by only using features found
-in any low end unix/linux supported computer.  The only requirements of the
-base-station are that it be capable of connecting to the internet and that
-it provides a USB connection.  Because video is not a requirement, we would
-recommend a small form factor Plug computer.  These are typically very
-small, power efficient and cost effective.
-
-The base-station must be able to support IEEE 802.15.4 communications with the Parking Space Monitors.  This is the reason the base-station is required to support a USB connection.  Rather than implementing a costly IEEE 802.15.4 solution directly into the base-station, we chose to connect a TeloB via USB and use a simple serial connection to allow the two devices to communicate.  
-
-\subsection{Collection Software}
-
-\subsubsection{Parking Space Monitors}
-
-The Parking Space Monitors are powered by TinyOS.  We chose TinyOS because
-it fully supports the TelosB and provides many features that rapidly
-speed-up development and TODO ** Finish describing the Parking Space
-Monitor software functionality**
-
-One of out key design goals was wireless reliability. We need to ensure that packets containing sensor details always make it back to the base-station for processing.  This can be very difficult in dynamic environment such as a parking structure, especially a multi-floored garage where line of site is impossible, and transmissions will not carry through the industrial walls present in the structure.  Therefore, alternative methods of packet forwarding must be introduced in order for the system to be able to operate with a single, centrally located base station.  In this project, we attempted to use Collection Tree Protocol (CTP).
-
-CTP is a dynamic point-to-sink routing protocol, which creates a tree
-topology for the network through which all packets travel to the base
-station, known as the root node or sink.  By creating this tree based
-topology, motes dynamically create an efficient routing method for
-collecting all data at a centralized point.  CTP does not handle
-point-to-point communication, though it does provide support for
-broadcasting to all nodes.  In our final implementation, due to a
-miscommunication about integrating the various parts of the project, CTP
-was left out of the demonstration in the interest of a robust demo.
-However, initial tests of a non-trivial CTP network gave indications that
-it would function well within our
-project~\cite{tep123:collection-tree-protocol}.
-
-\subsubsection{Base-Station}
-
-The base-station software has multiple functions.  It was written in C so as to be compatible with most current versions of unix/linux.  It is responsible for configuring the Parking Space Monitors, monitoring their status, collecting data from them, and sending the collected data to the aggregation software over the internet.
-
-Since the base-station needs to communicate with the motes over IEEE
-802.15.4 a TelosB is connected via USB as part of the base-station.  The
-TelosB is running the default BaseStation app (included with the TinyOS
-install) with only minor tweaks to support CTP.
-
-The base-station has the ability to send configuration packets to the
-Parking Space Monitors.  TODO **Finish describing the config process**
-
-The base station collects sensor readings from the parking space monitors
-and then determines what data is required by the aggregation software and
-then JSON encodes the data.  TODO **Make sure the JSON data is moved ahead
-of this section and finish describing this process**
-
-
-\subsection{Aggregation Software}
-
-Data leaving the base station of a parking lot is directed over then
-Internet to our aggregation software hosted on Google's
-AppEngine~\cite{google:appengine}.
-For this project, we decided the AppEngine environment was an appropriate
-choice for several reasons:
-\begin{itemize}
-	\item The service is free for light usage (testing and development).
-	\item It provides a Python programming environment.
-	\item Most importantly, it is designed to scale up with ease
-	transparently with large datasets.
-\end{itemize}
-
-The nature of our project is to have one sensor per parking space in a
-parking lot for every parking lot.
-This implies that over time our backend must be able to accept, store, and
-recall large amounts of current and historical data.
-We could have sunk our resources into using a traditional server model for
-the purposes of a prototype, however if the project were to start scaling
-up great amounts we would start running into resource barriers.
-Google's AppEngine is designed to scale with demand, this is largely due to
-their use of a datastore built on top of Bigtable~\cite{google:bigtable}.
-Though transparent to users of our system, this non-SQL based datastore
-forced a few notable differences from a SQL based datastore.
-
-First, while queries appear to be SQL, they are actually ``GQL,'' a
-SQL-like language.
-In general this does not bring any problems, but because of the
-organization of the datastore imprecise queries are not acceptable.
-You must know the data you are looking for.
-You cannot simple SELECT one or two columns from the datastore, rather you
-must get all the columns or a unique key identifier that matches the query.
-
-Second, its harder to perform proximity searches with the datastore because
-there is not concept of ``similar'' or ``like'' queries, you either know
-the data or don't know the data.
-However, with the help of the geomodel API~\cite{geomodel} we are able to
-use geohashing to perform proximity searches on the datastore.
-This is useful to locate nearby parking lots, allowing the end-user to
-identify other potential parking areas.
-
-With an understanding of the underlying technology, we are able to present
-an easy to use API.
-
-\subsubsection{A RESTful API}
+\subsection{A RESTful API}
 
 REpresentational State Transfer (REST) is an abstract model for building
 large-scale web services~\cite{pautasso:restful}.
 The principles of a RESTful architecture are an identification of resources
 through a URI, a ``pure'' HTTP interface, and self-contained hyperlinks.
-In this section we describe how we achieved these principles.
+This section describes how we achieved these principles.
 
 Our URI scheme is straight-forward.
 Each lot is given a unique identification consisting of alphanumerics and
@@ -361,7 +223,7 @@ identifies the Milbrook lot on Washington University's campus).
 	\label{fig:clientserverjson}
 \end{figure}
 
-Any request concerning this lot must go through its URI.
+Requests concerning this lot must go through its respective URI.
 Requests use one of the HTTP verbs of \texttt{GET}, \texttt{PUT}, or
 \texttt{POST}.
 A \texttt{GET} request simply returns the information for the requested URI
@@ -373,13 +235,6 @@ identification and status, as well as any associated meta-information that
 should be put in the datastore, an example of this can be seen in
 Figure~\ref{fig:clientserverjson}.
 Finally, a \texttt{POST} request handles the creation of new parking lots.
-
-With the API in place, we are able to create rich applications with ease
-for expansion and integration into other software.
-As a demonstration, we build up a web-based frontend in the next section
-that takes advantage of our API.
-
-\subsubsection{Frontend}
 
 \begin{figure}
     \begin{verbatim}
@@ -403,28 +258,217 @@ that takes advantage of our API.
 	\label{fig:serverclientjson}
 \end{figure}
 
-As mentioned above, a \texttt{GET} request on the parking lot identifier
-will result in either a HTML or JSON response.
+As mentioned, a \texttt{GET} request on the parking lot identifier results
+in either a HTML or JSON response.
 An example of the JSON response can be seen in
 Figure~\ref{fig:serverclientjson}.
-The response provides enough information to a client application to
+The JSON response provides enough information for a client application to
 identify the name of the lot, its location, the time of the most recent
 activity, and the list of spaces.
 Each space has a unique identifier, the status of that spot (full or
 empty), the time it was last updated, and any additional information about
 that spot (likely to be sensor readings at the last report).
-A client can combine this information with a virtual representation of the
-lot's topography, then keep that representation up-to-date by periodically
-querying the server for new information.
+A client can potentially combine this information with a virtual
+representation of the lot's topography, then keep that representation
+updated by periodically querying the server for new information.
 
-For our project, we've also built an HTML interface for viewing the
-information on a lot.
-Once a lot is selected by the user, our interface provides a map of the
-area surrounding the lot with markers indicating other lots in a two mile
-radius.
+With the API in place, we are able to tie an arbitrary sensor network into
+our service (if it follows our description) and can provide rich
+applications access to our information with ease and the possibility of
+expansion.
+We are now free to discuss the specifics of our hardware sensing platform
+and our web application that presents the data.
+
+\subsection{Hardware}
+When choosing the hardware for our PGI system we had specific goals in
+mind.  The system needed to be low-cost, reliable, power efficient, and
+easily customized to meet the needs of the specific structure or lot.
+We believe most potential business would come from upgrading existing
+parking structures versus that of new construction.
+Depending on there environment, some sensors may work better than others
+but the best sensor for a particularity environment still may not be the
+best choice for the entire system.
+Take for example an induction loop sensor, these are typically the
+best sensor for detecting the presence of a vehicle but in an pre-existing
+structure you must cut into the floor of every parking space to add them, a
+costly procedure.
+This is why it is necessary for the system to be easily customized and it
+is likely the most important requirement for the successful adoption of our
+system by the parking industry.
+When adding an inductive loop system, the installation cost is typically
+more prohibitive than that of the PGI system.
+Using wireless technology and supporting many different sensor types and
+configurations we believe we can successfully implement this system in both
+pre-existing and new parking structures.
+
+\subsubsection{Parking Space Monitors}
+
+The Parking Space Monitors need to be able to do more than just determine
+if a vehicle is present in a parking space.
+They must be able to run on a set of batteries for an extended period of
+time, support multiple sensor types and interfaces, and wirelessly transmit
+the required data to a base station for further processing.
+For all these reasons we chose the Telos Revision B (TelosB) wireless
+sensor module as the base for our Parking Space Monitors.
+
+\begin{figure}
+    \begin{center}
+		\includegraphics[width=\columnwidth]{figures/telosb}
+	\end{center}
+	\caption{Telos Revision B.}
+	\label{fig:telosb}
+\end{figure}
+
+
+Shown in Figure~\ref{fig:telosb}, the TelosB provides many
+features and sensors while still managing to use little power and support
+fast wireless communications.  We chose the TelosB because it includes a
+250 kbps IEEE 802.15.4 wireless transceiver; on-board temperature and light
+sensors; low power consumption; an on-board antenna; simple
+programming/collection interface; and a 10+6-pin expansion slot allowing
+analog, digital, or serial connections~\cite{moteiv:telosb}.
+% TODO was a itemized list, now it is integrated paragraph.
+
+The TelosB includes many different interfaces we could use 
+TODO **Finish describing the TelosB interface we could connect sensors to.  Such as analog, UART, I2C, Digital**
+
+\begin{figure}
+    \begin{center}
+		\includegraphics[width=\columnwidth]{figures/range_finder}
+	\end{center}
+	\caption{LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}
+	by MaxBotix\textsuperscript{\textregistered} (our ``sonar sensor'').}
+	\label{fig:range_finder}
+\end{figure}
+
+There are many different types of sensors that could have been used to
+monitor if a parking space is occupied or vacant.  These include infrared
+range finders, pressure sensors, and inductive sensors.
+We chose to use the
+LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}
+by MaxBotix\textsuperscript{\textregistered} (hereafter ``sonar sensor'')
+because of its price and feature set~\cite{maxbotix:maxsonar-datasheet}.
+These include:
+\begin{itemize}
+	\item TODO **Clean up this List**
+	\item Supports supply voltage from 2.5V to 5.5V
+	\item Detects objects from 6 inches out to 254 inches with 1 inch
+	resolution (0-6 inches range as 6 inches)
+	\item Output formats include pulse width, analog voltage, and serial digital
+\end{itemize}
+
+\subsubsection{Base Station}
+A MacBook Pro was used as the base-station in this project.
+However, keeping with our theme of low-cost, we kept the
+requirements of the base station to a minimum by only using features found
+in any low-end Unix/Linux computer.
+The only requirements of the base station are that it be capable of
+connecting to the Internet and that it provides a USB connection.
+Because video is not a requirement, we would recommend a small, power
+efficient and cost effective plug
+computer~\footnote{\url{http://www.wikipedia.org/wiki/Plug_computer}}.
+
+The base station must be able to have IEEE 802.15.4 communications with the
+Parking Space Monitors, this can be achieved by connecting a TeloB via USB
+and using a simple serial connection to allow the two devices to
+communicate.  
+
+\subsection{Collection Software}
+
+\subsubsection{Parking Space Monitors}
+
+The Parking Space Monitors operate using TinyOS.
+TinyOS fully supports the TelosB platform and provides many features that
+rapidly speed-up development and TODO ** Finish describing the Parking
+Space Monitor software functionality**
+
+One of our key design goals was wireless reliability.
+Packets containing sensor details must always make it back to the base station for processing.
+This can be very difficult in dynamic environment such as a parking
+structure, especially a multi-floored garage where line of site is
+impossible, and transmissions will attenuate through the industrial walls present in the structure.
+Therefore, alternative methods of packet forwarding must be introduced in
+order for the system to be able to operate with a single, centrally located
+base station.
+In this project, we attempted to use Collection Tree Protocol (CTP).
+
+CTP is a dynamic point-to-sink routing protocol, which creates a tree
+topology for the network through which all packets travel to the base
+station, known as the root node or sink.  By creating this tree based
+topology, motes dynamically create an efficient routing method for
+collecting all data at a centralized point.  CTP does not handle
+point-to-point communication, though it does provide support for
+broadcasting to all nodes~\cite{tep123:collection-tree-protocol}.
+In our final implementation, due to a miscommunication about integrating
+the various parts of the project, CTP was left out.
+However, initial tests of a non-trivial CTP network gave indications that
+it would function well within our project.
+
+\subsubsection{Base Station}
+
+The base station software has multiple functions.  It was written in C so
+as to be compatible with most current versions of Unix/Linux.
+It is responsible for configuring the Parking Space Monitors, monitoring their status, collecting data from them, and sending the collected data to the aggregation software over the Internet.
+
+Since the base station needs to communicate with the motes over IEEE
+802.15.4 a TelosB is connected via USB as part of the base station.
+The TelosB is running the default BaseStation app (included with the TinyOS
+install) with only minor tweaks to support CTP.
+
+The base-station has the ability to send configuration packets to the
+Parking Space Monitors.  TODO **Finish describing the config process**
+
+The base station collects sensor readings from the parking space monitors
+and then determines what data is required by the aggregation software and
+then encodes the data a JSON packet similar to the one in
+Figure~\ref{fig:clientserverjson}.
+
+\subsection{Aggregation Software}
+
+Data leaving the base station of a parking lot is directed over then
+Internet to our aggregation software hosted on Google's
+AppEngine~\cite{google:appengine}.
+We decided that AppEngine was an appropriate choice for several reasons:
+\begin{itemize}
+	\item The service is free for light usage (testing and development).
+	\item It provides a Python programming environment.
+	\item It scales up easily with large datasets.
+\end{itemize}
+
+We need easy scalability if we are to have one sensor per parking space for
+every parking lot.
+Thus our backend must be able to accept, store, and recall large amounts of
+current and historical data.
+A traditional server model may have worked for this prototype, but if the
+project starts scaling up we would quickly start running into barriers.
+AppEngine scales with demand due to their use of a data store built on top
+of Bigtable~\cite{google:bigtable}.
+Though transparent to users of our system, this non-SQL based data store
+forces some differences from a SQL based data store.
+
+While queries look like SQL, they are actually ``GQL,'' a SQL-like
+language.
+In general this does not bring any problems, but because of the
+organization of the data store imprecise queries are not acceptable.
+You must know the data you are looking for.
+You cannot SELECT one or two columns from a row, you
+must take the entire row or an identifier for the row.
+As such, proximity searches are difficult because there is not concept of
+``similar'' or ``like'' queries.
+You either know how to find the data or you can't find the data at all.
+However, with the help of the Geomodel API~\cite{geomodel} we can
+use geohashing for proximity searches.
+This allows the end-user to identify nearby parking areas.
+
+\subsubsection{Frontend}
+
+Our prototype frontend is an HTML interface that allows viewing information
+about a parking lot.
+The user can select a lot and our frontend provides a map of the area and
+marks lots within a two mile radius.
 It also displays a ``health'' indicator giving an approximate empty-to-full
-ratio, as well as a list of spaces that are filled and how long they've
-been filled.
+ratio, as well as a percentage and a list of full spaces and their usage
+duration.
 
 \begin{figure}
     \begin{center}
@@ -434,16 +478,15 @@ been filled.
 	\label{fig:fullness-chart}
 \end{figure}
 
-Additionally, by keeping a log of changes to a lot on the backend, we are
-able to provide a chart to indicate the average fullness of a lot over a
+We also provide a chart to indicate the average fullness of a lot over a
 time frame.
 For example, Figure~\ref{fig:fullness-chart} shows the average fullness of
 the ``DUC'' lot from 5:30am until 7:00am.
 At the 6:06am time slot there are 11 spaces being used, however only 20
 minutes earlier only 6 spaces are being used.
-Having access to this information would allow a daily commuter, or one time
-visitor, discover that by arriving only 20 minutes earlier they would have
-a much greater chance of easily finding a parking space.
+This information allows a commuter, or one time visitor, to find that by
+arriving a little earlier they have a much greater chance of easily finding
+a parking space.
 
 \section{Experiment}\label{sec:experiment}
 
@@ -465,23 +508,21 @@ periods of time and correctly logs/recalls historical data.
 \end{figure}
 
 A large amount of testing was performed on the sensing and sending portion
-of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space
+of this project.  Figure~\ref{fig:parking_sensor} shows a Parking Space
 Monitor mounted on a tripod.  This set-up was used to test the system with
-an actual vehicle.  It was through this testing that we found an issues
-with the sensing range of our Parking Space Monitors.
-Our sonar sensor claims to support a distance up to 254-inches, however we
-were only able to detect a vehicle up to approximately 120-inches or around
-ten feet.  This did not seem to be an issues with detecting a vehicle
-because they will be much closer than ten feet from the front of the
-parking space, but could be an issue with detecting smaller objects such as
-motorcycles.  More testing an analysis would need to be performed to
-determine if the ten foot range of the
-sonar sensor
-would really be an issue.  It was determined while testing that the issue
-was with the supply voltage to the sonar sensor.
-The sonar sensor range finder will support a supply voltage of 2.5V - 5.5V.
-We chose to power the sonar sensor using the TelosB analog supply which can
-only supply about 3.1V.
+an actual vehicle.  This testing found issues with the sensing range of our
+Parking Space Monitors.
+Our sonar sensor should support a distance up to 254-inches, however we
+were only able to detect a vehicle up to approximately 120-inches (10
+feet).  Though this did not cause an issue detecting a vehicle, it could be
+an issue with detecting smaller objects such as motorcycles.  More testing
+and analysis would need to be performed to determine if the ten foot range
+of the sonar sensor would really be an issue.
+
+Testing also found an issue with the supply voltage to the sonar sensor.
+The sonar sensor will support a supply voltage of 2.5V - 5.5V.
+We chose to power the sonar sensor using the TelosB analog supply which
+supplies about 3.1V.
 When we used an external supply to test just the sonar sensor at around 5V
 it had a much greater range compared to 3.1V.
 If after more testing it is determined to be an issue, there are solutions
@@ -523,38 +564,37 @@ computer, leading to more costly deploy.
 It also appears to be limited to the parking lot that it is deployed in and
 lacks the ability to aggregate the information for others to benefit.
 It would certainly be possible to improve the connectivity of this system
-to integrate with our back-end aggregation system to take advantage of
+to integrate with our backend aggregation system to take advantage of
 existing installations.
 
-Streetline, is a startup in the San Francisco area that similarly uses a
-wireless mesh network to link all the sensors
-together~\cite{pgi:streetline}.
+Streetline, a startup in the San Francisco area, uses a wireless network to
+link all the sensors together~\cite{pgi:streetline}.
 The Streetline system has recently (Summer 2010) begun to roll out sensors
 and upgraded meters for select areas in the San Francisco
 area~\cite{wired:streetline, sfpark}.
 This system uses surface (and sub-surface) sensor mounts that contain a
 wireless transmitter and a magnetometer for vehicle detection.
-Status is sent to a central aggregation server where users can see the
-status of street parking via their web browser, text message, or smart
-phone; it also allows municipal workers to identify vehicles that have not
-paid fully.
+Status information is sent to a central aggregation server where users can
+see the status of street parking via their web browser, text message, or
+smart phone; it also allows municipal workers to identify vehicles that
+have not paid fully.
 Presuming the Streetline trial is successful and the system expands, our
 system and their system should be able to integrate with little effort and
 could be seen as competitors.
 We view this a positive, as it demonstrates that our project is a useful
 idea with potential buyers available.
 
-There has also been a proposal to use existing security cameras with a view
-of a parking lot to detect vehicular presence~\cite{lin:vision-parking}.
-The results of their experiment, while decent for their scenario, seem
-unlikely to generalize to other systems.
-While it may be true that some lots have existing surveillance cameras, the
-paper also observes that cameras should be mounted higher for a more
-consistent and complete view of the lot.
-This goes against their principal of using existing cameras for the
-information, since additional cameras would have to be mounted to perform
-correctly (moving security cameras further from the observation area is
-probably not acceptable to the security officers).
+%There has also been a proposal to use existing security cameras with a view
+%of a parking lot to detect vehicular presence~\cite{lin:vision-parking}.
+%The results of their experiment, while decent for their scenario, seem
+%unlikely to generalize to other systems.
+%While it may be true that some lots have existing surveillance cameras, the
+%paper also observes that cameras should be mounted higher for a more
+%consistent and complete view of the lot.
+%This goes against their principal of using existing cameras for the
+%information, since additional cameras would have to be mounted to perform
+%correctly (moving security cameras further from the observation area is
+%probably not acceptable to the security officers).
 
 \section{Lessons Learned}\label{sec:lessons}
 
@@ -566,7 +606,8 @@ to twelve sensor connections (which can include our sonar sensors).
 This would allow us to either use two sensors per space to improve accuracy
 and monitor six spaces per TelosB or continue with a single range finder
 per space and monitor twelve parking spaces per TelosB.
-This could greatly decrease the cost of the overall system.
+This could greatly decrease the cost and power consumption of the overall
+system.
 
 Another interesting lesson was using Google's AppEngine for the backend.
 The cost structure of AppEngine is set up to be free as long as resource
@@ -578,9 +619,6 @@ code to be less resource intensive.
 Luckily, we were able to find a few code optimizations that greatly reduced
 the resources for the automatic update code putting us under the daily
 allotment again.
-AppEngine also recently introduced a new feature (``channels'') that would
-have also allowed us to provide true asynchronous updates instead of query
-oriented updates.
 
 \section{Conclusions and Future Work}\label{sec:conclusions}
 
