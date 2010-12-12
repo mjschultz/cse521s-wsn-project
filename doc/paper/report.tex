@@ -182,64 +182,53 @@ When choosing the hardware for our PGI system we had specific goals in mind.  Th
 
 \subsubsection{Parking Space Monitors}
 
-The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They need to be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit relevant data to a base-station for further processing.  For all these reasons we chose the TelosB wireless sensor module as the base to our Parking Space Monitors.  The TelosB provides a multitude of features and sensor and still manages to use little power and support fast wireless communications.
+The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They need to be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit relevant data to a base-station for further processing.  For all these reasons we chose the Telos Revision B (TelosB) wireless sensor module as the base to our Parking Space Monitors.
 
 \begin{figure}[h]
     \begin{center}
 		\includegraphics[width=\columnwidth]{figures/telosb}
 	\end{center}
-	\caption{TelosB.}
+	\caption{Telos Revision B.}
 	\label{fig:telosb}
 \end{figure}
 
 
-**FIX**
-Figure~\ref{fig:telosb} shows the TelosB, an ultra low power IEEE 802.15.4 compliant wireless sensor module.  More about the TelosB.
+Shown in Figure~\ref{fig:telosb}, the TelosB provides a multitude of features and sensor and still manages to use little power and support fast wireless communications.  Some of the reasons we chose the TelosB include:
+
+\begin{itemize}
+	\item 250kbps IEEE 802.15.4
+	\item Integrated ADC
+	\item Integrated Humidity, Temperature, and Light sensors
+	\item Ultra low current consumption
+	\item Programming and data collection via USB
+	\item Integrated onboard antenna
+\end{itemize}
+
+TinyOS support : mesh networking and communication implementation
 
 The TelosB offers many options for attaching sensors 
-The parking space monitors are the 
 
-There are many different types of sensors that we could have been used to monitor if a parking space is occupied or vacant.  These include Infrared range finders, pressure sensors, and inductive sensors.  
-
-HERE
-
-We chose to use ultra sonic 
+There are many different types of sensors that we could have been used to monitor if a parking space is occupied or vacant.  These include Infrared range finders, pressure sensors, and inductive sensors.  We chose to use the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} by MaxBotix\textsuperscript{\textregistered}.
 
 \begin{figure}[h]
     \begin{center}
 		\includegraphics[width=\columnwidth]{figures/range_finder}
 	\end{center}
-	\caption{LV-MaxSonar-EZ1.}
+	\caption{LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} by MaxBotix\textsuperscript{\textregistered}.}
 	\label{fig:range_finder}
 \end{figure}
 
 To actual
 
-LV-MaxSonar-EZ1 - Ultrasonic Rangefinder
+LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} - Ultrasonic Rangefinder
 Supply voltage 2.5V to 5.5V
 Detects objects from 6 inches out to 254 inches with 1 inch resolution (0-6 inches range as 6 inches)
 Output formats include pulse width, analog voltage, and serial digital
 
 \subsubsection{Base-Station}
-Following with our theme of low cost we tried to keep the requirements of the base-station to a minimum as well.  The base-station will support multiple 
+Following with our theme of low cost we tried to keep the cost of the base-station to a minimum as well.  The base-station will support multiple 
 
-The base-station has two key roles.  First
-
-In order to reliably and cost effectively  monitor the status of individual parking spaces in a lot or garage we need reliable, low cost hardware
-
-The TelosB mote was chosen to monitor 
-
-This should cover the physical hardware we used in building this.
-Including (but not limited to):
-
-- TelosB motes (listing any relevant specifications, why we used TelosB
- and not something else) \cite{xbow:telosb-datasheet}.
-
-- External sensor we used, specifications for that, more detail than
- TelosB since the reader will be less familiar with it, why we used that.
-
-At least one pictures of the telosb, the sensors, or the telosb with sensor
-attached.
+A a MacBook Pro was used to develop the base-station software.  The code was designed however to be ran on a cheap low end Linux computer.  
 
 \subsection{Collection Software}
 
@@ -247,23 +236,19 @@ attached.
 
 The Parking Space Monitors are powered by TinyOS.  We chose TinyOS because it fully supports the TelosB and provides many features that rapidly speed-up development and 
 
-One of out key design goals was wireless reliability.  We need to ensure that packets containing sensor details always make it back to the base-station for processing.  This can be very difficult in dynamic environment such as a parking structure.  
+One of out key design goals was wireless reliability. We need to ensure that packets containing sensor details always make it back to the base-station for processing.  This can be very difficult in dynamic environment such as a parking structure, especially a multi-floored garage where line of site is impossible, and transmissions will not carry through the industrial walls present in the structure.  Therefore, alternative methods of packet forwarding must be introduced in order for the system to be able to operate with a single, centrally located base station.  In this project, we attempted to use Collection Tree Protocol (CTP).
 
-
-CTP stuff~\cite{tep119:collection}.
+CTP is a dynamic point-to-sink routing protocol, which creates a tree topology for the network through which all packets travel to the base station, known as the root node or sink.  By creating this tree based topology, motes dynamically create an efficient routing method for collecting all data at a centralized point.  CTP does not handle point-to-point communication, though it does provide support for broadcasting to all nodes.  In our final implementation, due to a miscommunication about integrating the various parts of the project, CTP was left out of the demonstration in the interest of a robust demo.  However, initial tests of a non-trivial CTP network gave indications that it would function well within our project.~\cite{tep123:collection-tree-protocol}.
 
 \subsubsection{Base-Station}
 
-The base-station has multiple function.  It is responsible for configuring the Parking Space Monitors, ensuring the Parking Space Monitors are
+The base-station has multiple functions.  It is responsible for configuring the Parking Space Monitors, monitoring their status, collecting data from the Parking Space Monitors, and sending the necessary data to the aggregation software over the internet.
 
 The base station collects sensor reading from the parking space monitors and determines what data is import
 
-Collects sensor data.
+Since the base-station needs to communicate with the motes over IEEE 802.15.4 a TelosB was designed to be part of the base-station.  Therefore the base-station is composed of a unix/linux computer and a TelosB.  Each runs custom code and communicate over a serial connection.  The TelosB is running the default BaseStation app (included with the TinyOS install) with only minor tweaks on TinyOS.  The changes to the 
 
-Determines what data is important
-
-Since the base-station has a TelosB.
-
+ The two communicate over a serial connection controlled by the unix/linux computer.  One written in c for the unix computer and the other in nesC for the TelosB.  The TelosB software reads IEEE 802.15.4 from the motes and fowards the desired packets over the serial connection to the unix/linux computer.
 
 \subsection{Aggregation Software}
 
@@ -445,7 +430,7 @@ periods of time and correctly logs/recalls historical data.
 	\label{fig:parking_sensor}
 \end{figure}
 
-A large amount of testing was performed on the sensing and sending portion of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space Monitor mounted on a tripod.  This set-up was used to test the system with an actual vehicle.  It was through this testing that we found an issues with the sensing range of our Parking Space Monitors.  The EZ1 claims to support a distance up to 254-inches, however we were only able to detect a vehicle up to approximately 120-inches or around ten feet.  This did not seem to be an issues with detecting a vehicle because they will be much closer than ten feet from the front of the parking space, but could be an issue with detecting smaller objects such as motorcycles.  More testing an analysis would need to be performed to determine if the ten foot range of the EZ1 would really be an issue.  It was determined while testing that the issue was with the supply voltage to the EZ1.  The EZ1 range finder will support a supply voltage of 2.5V - 5.5V.  We chose to power the EZ1 using the TelosB analog supply which can only supply about 3.1V.  When we used an external supply to test just the EV1 at around 5V it had a much greater range compared to 3.1V. If after more testing it is determined to be an issue, there are solutions such as using an external power supply for the EZ1 or possibly mounting the sensor above the space to cover a greater area of the space. 
+A large amount of testing was performed on the sensing and sending portion of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space Monitor mounted on a tripod.  This set-up was used to test the system with an actual vehicle.  It was through this testing that we found an issues with the sensing range of our Parking Space Monitors.  The LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} claims to support a distance up to 254-inches, however we were only able to detect a vehicle up to approximately 120-inches or around ten feet.  This did not seem to be an issues with detecting a vehicle because they will be much closer than ten feet from the front of the parking space, but could be an issue with detecting smaller objects such as motorcycles.  More testing an analysis would need to be performed to determine if the ten foot range of the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} would really be an issue.  It was determined while testing that the issue was with the supply voltage to the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}.  The LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} range finder will support a supply voltage of 2.5V - 5.5V.  We chose to power the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} using the TelosB analog supply which can only supply about 3.1V.  When we used an external supply to test just the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} at around 5V it had a much greater range compared to 3.1V. If after more testing it is determined to be an issue, there are solutions such as using an external power supply for the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} or possibly mounting the sensor above the space to cover a greater area of the space. 
 
 
 
@@ -510,7 +495,7 @@ probably not acceptable to the security officers).
 
 \section{Lessons Learned}\label{sec:lessons}
 
-If we were to pursue this project into the future we would probably modify the design to allow a single TelosB to monitor multiple sensors.  The ultrasonic range finder we used has multiple output types, one of them being a two wire digital serial connection.  This connection allows for up to twelve EZ1 sensors.  This would allow us to either use two sensors per space to improve accuracy and monitor six spaces per TelosB or continue with a single range finder per space and monitor twelve parking spaces per TelosB.  This could greatly decrease the cost of the overall system.
+If we were to pursue this project into the future we would probably modify the design to allow a single TelosB to monitor multiple sensors.  The ultrasonic range finder we used has multiple output types, one of them being a two wire digital serial connection.  This connection allows for up to twelve LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} sensors.  This would allow us to either use two sensors per space to improve accuracy and monitor six spaces per TelosB or continue with a single range finder per space and monitor twelve parking spaces per TelosB.  This could greatly decrease the cost of the overall system.
 
 Anything we would have done differently if we were to pursue this project
 in more detail again.
