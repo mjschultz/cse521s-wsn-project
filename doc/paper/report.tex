@@ -178,11 +178,11 @@ Building this system requires a fair amount of hardware and software
 knowledge and is described below.
 
 \subsection{Hardware}
-When choosing the hardware for our PGI system we had specific goals in mind.  The system would need to be low cost, reliable, power efficient, and easily customized to meet the needs of the specific structure/lot.  We believe most of our potential business would come from upgrading existing parking structures versus that of new construction.  Some sensors may work better than others depending on their environment, but the best sensor for a particularity environment still may not be the best choice for the system.  Take for example an induction loop sensor, these are typically the best sensor for detecting the presence of a vehicle but in an already existing structure, it would prove to be very expensive to cut into the floor of every space to add them.  This is why it is necessary for the system to be easily customized and it is likely the most important requirement for the successful adoption of our system by the parking industry.  When adding a system such as this it is typically the installation cost that are prohibitive versus the devices themselves.  By including wireless technology and supporting many different sensor types and configurations we believe we can successfully implement this system in pre-existing and new parking structures.
+When choosing the hardware for our PGI system we had specific goals in mind.  The system would need to be low cost, reliable, power efficient, and easily customized to meet the needs of the specific structure/lot.  We believe most of our potential business would come from upgrading existing parking structures versus that of new construction.  Depending on there environment, some sensors may work better than others but the best sensor for a particularity environment still may not be the best choice for the system.  Take for example an induction loop sensor, these are typically the best sensor for detecting the presence of a vehicle but in an pre-existing structure it would prove to be very expensive to cut into the floor of every parking space to add them.  This is why it is necessary for the system to be easily customized and it is likely the most important requirement for the successful adoption of our system by the parking industry.  When adding a system such as this, it is typical for the installation cost to be more prohibitive than that of the PGI system.  By including wireless technology and supporting many different sensor types and configurations we believe we can successfully implement this system in both pre-existing and new parking structures.
 
 \subsubsection{Parking Space Monitors}
 
-The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They need to be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit relevant data to a base-station for further processing.  For all these reasons we chose the Telos Revision B (TelosB) wireless sensor module as the base to our Parking Space Monitors.
+The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They must be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit required data to a base-station for further processing.  For all these reasons we chose the Telos Revision B (TelosB) wireless sensor module as the base for our Parking Space Monitors.
 
 \begin{figure}[h]
     \begin{center}
@@ -193,22 +193,22 @@ The Parking Space Monitors need to be able to do more than just determine if a v
 \end{figure}
 
 
-Shown in Figure~\ref{fig:telosb}, the TelosB provides a multitude of features and sensor and still manages to use little power and support fast wireless communications.  Some of the reasons we chose the TelosB include:
+Shown in Figure~\ref{fig:telosb}, the TelosB provides a multitude of features and sensor but still manages to use little power and support fast wireless communications.  Some of the reasons we chose the TelosB include:
 
 \begin{itemize}
+	\item TODO **Clean up this List**
 	\item 250kbps IEEE 802.15.4
 	\item Integrated ADC
 	\item Integrated Humidity, Temperature, and Light sensors
 	\item Ultra low current consumption
 	\item Programming and data collection via USB
-	\item Integrated onboard antenna
+	\item Integrated On-Board Antenna
 \end{itemize}
 
-TinyOS support : mesh networking and communication implementation
+The TelosB includes many different interfaces we could use 
+TODO **Finish describing the TelosB interface we could connect sensors to.  Such as analog, UART, I2C, Digital**
 
-The TelosB offers many options for attaching sensors 
-
-There are many different types of sensors that we could have been used to monitor if a parking space is occupied or vacant.  These include Infrared range finders, pressure sensors, and inductive sensors.  We chose to use the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} by MaxBotix\textsuperscript{\textregistered}.
+There are many different types of sensors that could have been used to monitor if a parking space is occupied or vacant.  These include infrared range finders, pressure sensors, and inductive sensors.  We chose to use the LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} by MaxBotix\textsuperscript{\textregistered} because of it's price and feature set.
 
 \begin{figure}[h]
     \begin{center}
@@ -218,37 +218,40 @@ There are many different types of sensors that we could have been used to monito
 	\label{fig:range_finder}
 \end{figure}
 
-To actual
+These include:
 
-LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark} - Ultrasonic Rangefinder
-Supply voltage 2.5V to 5.5V
-Detects objects from 6 inches out to 254 inches with 1 inch resolution (0-6 inches range as 6 inches)
-Output formats include pulse width, analog voltage, and serial digital
+\begin{itemize}
+	\item TODO **Clean up this List**
+	\item Supports supply voltage from 2.5V to 5.5V
+	\item Detects objects from 6 inches out to 254 inches with 1 inch resolution (0-6 inches range as 6 inches)
+	\item Output formats include pulse width, analog voltage, and serial digital
+\end{itemize}
 
 \subsubsection{Base-Station}
-Following with our theme of low cost we tried to keep the cost of the base-station to a minimum as well.  The base-station will support multiple 
+For ease of development a MacBook Pro was used as the base-station in this project.  However, keeping with our theme of low cost, we tried to keep the requirements of the base-station to a minimum by only using features found in any low end unix/linux supported computer.  The only requirements of the base-station are that it be capable of connecting to the internet and that it provides a USB connection.  Because video is not a requirement, we would recommend a small form factor Plug computer.  These are typically very small, power efficient and cost effective.
 
-A a MacBook Pro was used to develop the base-station software.  The code was designed however to be ran on a cheap low end Linux computer.  
+The base-station must be able to support IEEE 802.15.4 communications with the Parking Space Monitors.  This is the reason the base-station is required to support a USB connection.  Rather than implementing a costly IEEE 802.15.4 solution directly into the base-station, we chose to connect a TeloB via USB and use a simple serial connection to allow the two devices to communicate.  
 
 \subsection{Collection Software}
 
 \subsubsection{Parking Space Monitors}
 
-The Parking Space Monitors are powered by TinyOS.  We chose TinyOS because it fully supports the TelosB and provides many features that rapidly speed-up development and 
+The Parking Space Monitors are powered by TinyOS.  We chose TinyOS because it fully supports the TelosB and provides many features that rapidly speed-up development and TODO ** Finish describing the Parking Space Monitor software functionality**
 
 One of out key design goals was wireless reliability. We need to ensure that packets containing sensor details always make it back to the base-station for processing.  This can be very difficult in dynamic environment such as a parking structure, especially a multi-floored garage where line of site is impossible, and transmissions will not carry through the industrial walls present in the structure.  Therefore, alternative methods of packet forwarding must be introduced in order for the system to be able to operate with a single, centrally located base station.  In this project, we attempted to use Collection Tree Protocol (CTP).
 
-CTP is a dynamic point-to-sink routing protocol, which creates a tree topology for the network through which all packets travel to the base station, known as the root node or sink.  By creating this tree based topology, motes dynamically create an efficient routing method for collecting all data at a centralized point.  CTP does not handle point-to-point communication, though it does provide support for broadcasting to all nodes.  In our final implementation, due to a miscommunication about integrating the various parts of the project, CTP was left out of the demonstration in the interest of a robust demo.  However, initial tests of a non-trivial CTP network gave indications that it would function well within our project.~\cite{tep123:collection-tree-protocol}.
+CTP is a dynamic point-to-sink routing protocol, which creates a tree topology for the network through which all packets travel to the base station, known as the root node or sink.  By creating this tree based topology, motes dynamically create an efficient routing method for collecting all data at a centralized point.  CTP does not handle point-to-point communication, though it does provide support for broadcasting to all nodes.  In our final implementation, due to a miscommunication about integrating the various parts of the project, CTP was left out of the demonstration in the interest of a robust demo.  However, initial tests of a non-trivial CTP network gave indications that it would function well within our project~\cite{tep123:collection-tree-protocol}.
 
 \subsubsection{Base-Station}
 
-The base-station has multiple functions.  It is responsible for configuring the Parking Space Monitors, monitoring their status, collecting data from the Parking Space Monitors, and sending the necessary data to the aggregation software over the internet.
+The base-station software has multiple functions.  It was written in C so as to be compatible with most current versions of unix/linux.  It is responsible for configuring the Parking Space Monitors, monitoring their status, collecting data from them, and sending the collected data to the aggregation software over the internet.
 
-The base station collects sensor reading from the parking space monitors and determines what data is import
+Since the base-station needs to communicate with the motes over IEEE 802.15.4 a TelosB is connected via USB as part of the base-station.  The TelosB is running the default BaseStation app (included with the TinyOS install) with only minor tweaks to support CTP.
 
-Since the base-station needs to communicate with the motes over IEEE 802.15.4 a TelosB was designed to be part of the base-station.  Therefore the base-station is composed of a unix/linux computer and a TelosB.  Each runs custom code and communicate over a serial connection.  The TelosB is running the default BaseStation app (included with the TinyOS install) with only minor tweaks on TinyOS.  The changes to the 
+The base-station has the ability to send configuration packets to the Parking Space Monitors.  TODO **Finish describing the config process**
 
- The two communicate over a serial connection controlled by the unix/linux computer.  One written in c for the unix computer and the other in nesC for the TelosB.  The TelosB software reads IEEE 802.15.4 from the motes and fowards the desired packets over the serial connection to the unix/linux computer.
+The base station collects sensor readings from the parking space monitors and then determines what data is required by the aggregation software and then JSON encodes the data.  TODO **Make sure the JSON data is moved ahead of this section and finish describing this process**
+
 
 \subsection{Aggregation Software}
 
