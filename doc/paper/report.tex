@@ -490,12 +490,23 @@ mounting the sensor above the space to cover a greater area of the space.
 
 \subsection{Backend and Frontend}
 
-Discussion of how the simulator tested the backend and any problems that
-arose from it.
-% Couldn't really test large scale deployment of sensor backend since we
-% had limited resources with respect to actual motes, funds to purchase
-% sonar sensors, building containers to house the sensors overnight, and
-% the ability to gather data over an extended period of time.
+Since it was not feasible to test a large scale deployment due to cost,
+time, and logistical constraints a base station simulator was developed.
+Instead of interacting with a sensor network for gathering data, the
+simulator was designed to generate a number of changes to a lot every one
+to two minutes.
+The  changes include modifying the status of a random number of parking
+spaces with some weight attached to the likelihood of a space becoming empty
+for a time interval.
+For example, during the overnight hours there only a 16\% chance of a
+parking space becoming full causing the overnight hours to present less lot
+usage.
+
+This simulator helped test the ability of the backend to continue to be
+stable over a number of hours while periodically inserting new log
+information and maintaining the current status of a parking lot.
+It also helped generate large amounts of data for testing the analytics
+portion of our frontend (charting for time periods).
 
 \section{Related Work}\label{sec:related}
 
@@ -557,8 +568,19 @@ and monitor six spaces per TelosB or continue with a single range finder
 per space and monitor twelve parking spaces per TelosB.
 This could greatly decrease the cost of the overall system.
 
-Anything we would have done differently if we were to pursue this project
-in more detail again.
+Another interesting lesson was using Google's AppEngine for the backend.
+The cost structure of AppEngine is set up to be free as long as resource
+usage stays below a daily threshold.
+After modifying the frontend to automatically update the lot usage, we
+easily surpassed the daily threshold giving us two options: back the
+AppEngine instance with some money to increase our limits or refactor the
+code to be less resource intensive.
+Luckily, we were able to find a few code optimizations that greatly reduced
+the resources for the automatic update code putting us under the daily
+allotment again.
+AppEngine also recently introduced a new feature (``channels'') that would
+have also allowed us to provide true asynchronous updates instead of query
+oriented updates.
 
 \section{Conclusions and Future Work}\label{sec:conclusions}
 
