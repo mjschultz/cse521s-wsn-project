@@ -11,6 +11,18 @@ The basic directory structure is as follows:
 
 * README.md - this file!
 * doc - all documents/presentations generated for this project
+  * proposal - original project proposal document source
+  * demo_i - first demo presentation slides
+  * demo_ii - second demo presentation slides
+  * demo_iii - final presentation slides (PowerPoint and PDF)
+  * paper - find project report document source
 * src - source code for this project
-  * frontend - front-end code for displaying the status to end users
+  * ParkingGarage - source for Parking Garage motes with sonar sensors
+  * Gateway - bridge between the sensor network and the AppEngine instance
+  * aggregator - backend and frontend code for the AppEngine instance
+  * BaseStation - virturally identical to BaseStation source from TinyOS
 
+Source directories each have their own README file with further information
+about the component.
+
+A video demonstration is noted in the final report.
