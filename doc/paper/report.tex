@@ -182,7 +182,7 @@ When choosing the hardware for our PGI system we had specific goals in mind.  Th
 
 \subsubsection{Parking Space Monitors}
 
-The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They must be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit required data to a base-station for further processing.  For all these reasons we chose the Telos Revision B (TelosB) wireless sensor module as the base for our Parking Space Monitors.
+The Parking Space Monitors (PSMs) need to be able to do more than just determine if a vehicle is present in a parking space.  They must be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit required data to a base-station for further processing.  For all these reasons we chose the Telos Revision B (TelosB) wireless sensor module as the base for our PSMs.
 
 \begin{figure}
     \begin{center}
@@ -200,10 +200,8 @@ fast wireless communications.  We chose the TelosB because it includes a
 sensors; low power consumption; an on-board antenna; simple
 programming/collection interface; and a 10+6-pin expansion slot allowing
 analog, digital, or serial connections~\cite{moteiv:telosb}.
-% TODO was a itemized list, now it is integrated paragraph.
 
-The TelosB includes many different interfaces we could use 
-TODO **Finish describing the TelosB interface we could connect sensors to.  Such as analog, UART, I2C, Digital**
+The TelosB includes many different interfaces we could use to attach sensors too.  These include analog to digital, UART, I2C, and digital connections, this selection gives us a very flexible platform~\cite{moteiv:telosb}.  Its this flexibility that will make this system a viable option for parking structures.
 
 \begin{figure}
     \begin{center}
@@ -219,16 +217,9 @@ monitor if a parking space is occupied or vacant.  These include infrared
 range finders, pressure sensors, and inductive sensors.
 We chose to use the
 LV-MaxSonar\textsuperscript{\textregistered}-EZ1\textsuperscript{\texttrademark}
-by MaxBotix\textsuperscript{\textregistered} (hereafter ``sonar sensor'')
-because of it's price and feature set~\cite{maxbotix:maxsonar-datasheet}.
-These include:
-\begin{itemize}
-	\item TODO **Clean up this List**
-	\item Supports supply voltage from 2.5V to 5.5V
-	\item Detects objects from 6 inches out to 254 inches with 1 inch
-	resolution (0-6 inches range as 6 inches)
-	\item Output formats include pulse width, analog voltage, and serial digital
-\end{itemize}
+by MaxBotix\textsuperscript{\textregistered} (hereafter ``EZ1'')
+because of it's low price and large feature set.
+The EZ1 supports a wide range of standard supply voltage inputs.  This allows us a great deal of flexibility in choosing how to power the EZ1.  It can detect objects from 6 inches to 254 inches.  This is enough range to cover the complete parking space.  The EZ1 supports many output formats including pulse width, analog voltage, and serial digital.  This gives us multiple ways to connect the same sensor depending on the environment~\cite{maxbotix:maxsonar-datasheet}.
 
 \subsubsection{Base-Station}
 For ease of development a MacBook Pro was used as the base-station in this
@@ -240,18 +231,15 @@ it provides a USB connection.  Because video is not a requirement, we would
 recommend a small form factor Plug computer.  These are typically very
 small, power efficient and cost effective.
 
-The base-station must be able to support IEEE 802.15.4 communications with the Parking Space Monitors.  This is the reason the base-station is required to support a USB connection.  Rather than implementing a costly IEEE 802.15.4 solution directly into the base-station, we chose to connect a TeloB via USB and use a simple serial connection to allow the two devices to communicate.  
+The base-station must be able to support IEEE 802.15.4 communications with the PSMs.  This is the reason the base-station is required to support a USB connection.  Rather than implementing a costly IEEE 802.15.4 solution directly into the base-station, we chose to connect a TeloB via USB and use a simple serial connection to allow the two devices to communicate.  
 
 \subsection{Collection Software}
 
 \subsubsection{Parking Space Monitors}
 
-The Parking Space Monitors are powered by TinyOS.  We chose TinyOS because
-it fully supports the TelosB and provides many features that rapidly
-speed-up development and TODO ** Finish describing the Parking Space
-Monitor software functionality**
+The PSMs are powered by TinyOS.  We chose TinyOS because it fully supports the TelosB and provides many features that rapidly speed-up development.  These include mesh networking and communication protocols as well as native support built in for all the connection interfaces described earlier.
 
-One of out key design goals was wireless reliability. We need to ensure that packets containing sensor details always make it back to the base-station for processing.  This can be very difficult in dynamic environment such as a parking structure, especially a multi-floored garage where line of site is impossible, and transmissions will not carry through the industrial walls present in the structure.  Therefore, alternative methods of packet forwarding must be introduced in order for the system to be able to operate with a single, centrally located base station.  In this project, we attempted to use Collection Tree Protocol (CTP).
+The PSMs receive configuration data from the base-station and then begin monitoring sensor values.  Every sample period the PSMs sample the sensors ten times and average the values.  Those values are then wirelessly transmitted to the base-station every fifteen seconds.  One of our key design goals was wireless reliability. We need to ensure that packets containing sensor details always make it back to the base-station for processing.  This can be very difficult in dynamic environment such as a parking structure, especially a multi-floored garage where line of site is impossible, and transmissions will not carry through the industrial walls present in the structure.  Therefore, alternative methods of packet forwarding must be introduced in order for the system to be able to operate with a single, centrally located base station.  In this project, we attempted to use Collection Tree Protocol (CTP).
 
 CTP is a dynamic point-to-sink routing protocol, which creates a tree
 topology for the network through which all packets travel to the base
@@ -268,21 +256,18 @@ project~\cite{tep123:collection-tree-protocol}.
 
 \subsubsection{Base-Station}
 
-The base-station software has multiple functions.  It was written in C so as to be compatible with most current versions of unix/linux.  It is responsible for configuring the Parking Space Monitors, monitoring their status, collecting data from them, and sending the collected data to the aggregation software over the internet.
+The base-station software has multiple functions.  It was written in C so as to be compatible with most current versions of unix/linux.  It is responsible for configuring the PSMs, monitoring their status, collecting data from them, and sending the collected data to the aggregation software over the internet.
 
 Since the base-station needs to communicate with the motes over IEEE
-802.15.4 a TelosB is connected via USB as part of the base-station.  The
+802.15.4, a TelosB is connected via USB as part of the base-station.  The
 TelosB is running the default BaseStation app (included with the TinyOS
 install) with only minor tweaks to support CTP.
 
 The base-station has the ability to send configuration packets to the
-Parking Space Monitors.  TODO **Finish describing the config process**
+PSMs.  Its through this configuration process that the PSMs are assigned their parking space IDs.  The configuration packet structure was designed to be easily extended to support future needs.  For example, the base-station could adjust sensor read rates or data transmission rates based on the time of day to increase PSM battery life.
 
-The base station collects sensor readings from the parking space monitors
-and then determines what data is required by the aggregation software and
-then JSON encodes the data.  TODO **Make sure the JSON data is moved ahead
-of this section and finish describing this process**
-
+The base-station's primary purpose is to collect sensor readings from the PSMs
+and then determines what data is required by the aggregation software.  That data is then JSON encoded and transfered via an HTTP put to the Google App Engine were it can be processed by the aggregation software.  
 
 \subsection{Aggregation Software}
 
@@ -468,24 +453,22 @@ A large amount of testing was performed on the sensing and sending portion
 of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space
 Monitor mounted on a tripod.  This set-up was used to test the system with
 an actual vehicle.  It was through this testing that we found an issues
-with the sensing range of our Parking Space Monitors.
-Our sonar sensor claims to support a distance up to 254-inches, however we
+with the sensing range of our PSMs.
+The EZ1 claims to support a distance up to 254-inches, however we
 were only able to detect a vehicle up to approximately 120-inches or around
 ten feet.  This did not seem to be an issues with detecting a vehicle
 because they will be much closer than ten feet from the front of the
 parking space, but could be an issue with detecting smaller objects such as
-motorcycles.  More testing an analysis would need to be performed to
-determine if the ten foot range of the
-sonar sensor
-would really be an issue.  It was determined while testing that the issue
-was with the supply voltage to the sonar sensor.
-The sonar sensor range finder will support a supply voltage of 2.5V - 5.5V.
-We chose to power the sonar sensor using the TelosB analog supply which can
+motorcycles.  More testing and analysis would need to be performed to
+determine if the ten foot range of the EZ1 would really be an issue.  It was determined while testing that the issue
+was with the supply voltage to the EZ1.
+The EZ1 range finder will support a supply voltage of 2.5V - 5.5V.
+We chose to power the EZ1 using the TelosB analog supply which can
 only supply about 3.1V.
-When we used an external supply to test just the sonar sensor at around 5V
+When we used an external supply to test just the EZ1 at around 5V
 it had a much greater range compared to 3.1V.
 If after more testing it is determined to be an issue, there are solutions
-such as using an external power supply for the sonar sensor or possibly
+such as using an external power supply for the EZ1 or possibly
 mounting the sensor above the space to cover a greater area of the space. 
 
 \subsection{Backend and Frontend}
@@ -550,9 +533,7 @@ probably not acceptable to the security officers).
 If we were to pursue this project into the future we would probably modify
 the design to allow a single TelosB to monitor multiple sensors.  The
 ultrasonic range finder we used has multiple output types, one of them
-being a two wire digital serial connection.  This connection allows for up
-to twelve sensor connections (which can include our sonar sensors).
-This would allow us to either use two sensors per space to improve accuracy
+being a two wire digital serial connection.  This allows for up to twelve EZ1s to be used with a single serial connection.  This would allow us to either use two sensors per space to improve accuracy
 and monitor six spaces per TelosB or continue with a single range finder
 per space and monitor twelve parking spaces per TelosB.
 This could greatly decrease the cost of the overall system.
