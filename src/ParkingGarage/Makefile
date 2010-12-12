@@ -1,0 +1,2 @@
+COMPONENT=ParkingGarageAppC
+include $(MAKERULES)
