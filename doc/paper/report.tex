@@ -178,15 +178,11 @@ Building this system requires a fair amount of hardware and software
 knowledge and is described below.
 
 \subsection{Hardware}
-When choosing the hardware for our PGI system we had specific goals in mind.  The system would need to be low cost, reliable, power efficient, and easily customized to meet the needs of the specific structure/lot.  
-
-We believe most of our potential business would come from upgrading existing parking structures versus that of new construction.  This is why we believe the need for the system to be easily customized is the most important requirement for a successful adoption by the parking industry.  When adding a system such as this it is typically the installation cost that are prohibitive vs the devices themselves 
-
-By supporting many different sensor types and configurations for existing construction we are providing new construction many options as well.
+When choosing the hardware for our PGI system we had specific goals in mind.  The system would need to be low cost, reliable, power efficient, and easily customized to meet the needs of the specific structure/lot.  We believe most of our potential business would come from upgrading existing parking structures versus that of new construction.  Some sensors may work better than others depending on their environment, but the best sensor for a particularity environment still may not be the best choice for the system.  Take for example an induction loop sensor, these are typically the best sensor for detecting the presence of a vehicle but in an already existing structure, it would prove to be very expensive to cut into the floor of every space to add them.  This is why it is necessary for the system to be easily customized and it is likely the most important requirement for the successful adoption of our system by the parking industry.  When adding a system such as this it is typically the installation cost that are prohibitive versus the devices themselves.  By including wireless technology and supporting many different sensor types and configurations we believe we can successfully implement this system in pre-existing and new parking structures.
 
 \subsubsection{Parking Space Monitors}
 
-The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They need to be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, wireless transmit relevant data to a base-station.  For all these reasons we chose the TelosB wireless sensor module as the base to our Parking Space Monitors.  The TelosBs provide a multitude of features and sensor and still manages to support.
+The Parking Space Monitors need to be able to do more than just determine if a vehicle is present in a parking space.  They need to be able to run on a set of batteries for an extended period of time, support multiple sensor types and interfaces, and wirelessly transmit relevant data to a base-station for further processing.  For all these reasons we chose the TelosB wireless sensor module as the base to our Parking Space Monitors.  The TelosB provides a multitude of features and sensor and still manages to use little power and support fast wireless communications.
 
 \begin{figure}[h]
     \begin{center}
@@ -196,12 +192,16 @@ The Parking Space Monitors need to be able to do more than just determine if a v
 	\label{fig:telosb}
 \end{figure}
 
-The TelosB is an ultra low power IEEE 802.15.4 compliant wireless sensor module.  More about the TelosB.
 
-By choosing the TelosB we have many different options to attach sensors with
+**FIX**
+Figure~\ref{fig:telosb} shows the TelosB, an ultra low power IEEE 802.15.4 compliant wireless sensor module.  More about the TelosB.
+
+The TelosB offers many options for attaching sensors 
 The parking space monitors are the 
 
-There are many different types of sensors that we could have been used to monitor if a parking space is occupied or vacant.  These include infrared range finders, magnetic
+There are many different types of sensors that we could have been used to monitor if a parking space is occupied or vacant.  These include Infrared range finders, pressure sensors, and inductive sensors.  
+
+HERE
 
 We chose to use ultra sonic 
 
@@ -437,8 +437,6 @@ periods of time and correctly logs/recalls historical data.
 
 \subsection{Sensing and Sending}
 
-Sensing and sending from the Parking Space Monitors to the base-station to the 
-
 \begin{figure}[h]
     \begin{center}
 		\includegraphics[width=\columnwidth]{figures/parking_sensor}
@@ -447,9 +445,11 @@ Sensing and sending from the Parking Space Monitors to the base-station to the
 	\label{fig:parking_sensor}
 \end{figure}
 
-A great deal of testing was performed on the sensing and sending portion of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space Monitor mounted on a tripod 
+A large amount of testing was performed on the sensing and sending portion of this project.  Figure~\ref{fig:parking_sensor}  shows a Parking Space Monitor mounted on a tripod.  This set-up was used to test the system with an actual vehicle.  It was through this testing that we found an issues with the sensing range of our Parking Space Monitors.  The EZ1 claims to support a distance up to 254-inches, however we were only able to detect a vehicle up to approximately 120-inches or around ten feet.  This did not seem to be an issues with detecting a vehicle because they will be much closer than ten feet from the front of the parking space, but could be an issue with detecting smaller objects such as motorcycles.  More testing an analysis would need to be performed to determine if the ten foot range of the EZ1 would really be an issue.  It was determined while testing that the issue was with the supply voltage to the EZ1.  The EZ1 range finder will support a supply voltage of 2.5V - 5.5V.  We chose to power the EZ1 using the TelosB analog supply which can only supply about 3.1V.  When we used an external supply to test just the EV1 at around 5V it had a much greater range compared to 3.1V. If after more testing it is determined to be an issue, there are solutions such as using an external power supply for the EZ1 or possibly mounting the sensor above the space to cover a greater area of the space. 
 
-It was through this testing that we found the issues with the range of our Parking Space Monitors.  The EZ1 claims to support a distance up to 254-inches, however we were only able to detect a vehicle   The EZ1 range finder will support a supply voltage of 2.5V - 5.5V.  The EZ1 is powered by the TelosB analog supply of ~3.1V.  
+
+
+
 
 \subsection{Backend and Frontend}
 
@@ -510,7 +510,7 @@ probably not acceptable to the security officers).
 
 \section{Lessons Learned}\label{sec:lessons}
 
-If we were to pursue this project into the future we would probably modify the design of the sensor placement.
+If we were to pursue this project into the future we would probably modify the design to allow a single TelosB to monitor multiple sensors.  The ultrasonic range finder we used has multiple output types, one of them being a two wire digital serial connection.  This connection allows for up to twelve EZ1 sensors.  This would allow us to either use two sensors per space to improve accuracy and monitor six spaces per TelosB or continue with a single range finder per space and monitor twelve parking spaces per TelosB.  This could greatly decrease the cost of the overall system.
 
 Anything we would have done differently if we were to pursue this project
 in more detail again.
