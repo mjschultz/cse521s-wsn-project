@@ -346,7 +346,7 @@ Any request concerning this lot must go through its URI.
 Requests use one of the HTTP verbs of \texttt{GET}, \texttt{PUT}, or
 \texttt{POST}.
 A \texttt{GET} request simply returns the information for the requested URI
-in either the HTML or JSON format.
+in either the HTML or JSON~\cite{crockford:json} format.
 A \texttt{PUT} request attempts to store updated status information to the
 lot.
 This request contains the list of parking spaces to update, their
@@ -517,7 +517,36 @@ in more detail again.
 
 \section{Conclusions and Future Work}\label{sec:conclusions}
 
-Conclusions from this project.
+This project created an extensible wireless sensor that is able to detect
+the presence of a vehicle in a parking space.
+That data is transferred from the sensor, to the base station, and over the
+Internet to our backend aggregator.
+Once at our backend, the data is logged and inserted into a scalable web
+infrastructure.
+At any point an end-user is able to query our web service to determine the
+current fullness of a lot at their destination and, if desired, find the
+fullness of lots that are near-by to their destination.
+The end-user is also able to discover when the lot is likely to be most
+empty or most full.
+Moreover, through the use of a web-based API using the standard JSON
+format, application developers can interact with our system hassle-free
+allowing rich web apps, smart-phone apps, or data mining opportunities.
+
+As with many projects, there are both many features that can still be added
+and much research into the viability of deploying such a sensor network.
+Feature-wise, the web API could support richer queries.
+For example, the ability to select multiple date ranges for charting
+allowing a user to view average aggregate data for the weekdays over the
+past month to decide if a parking lot should expand.
+Another option is to integrate our system with a mapping service and
+combine up to the minute traffic reports to allow a user to plan their trip
+while being mindful of the route, traffic conditions, and available
+parking.
+On the hardware side, a careful evaluation of battery life and how to
+increase battery life would be helpful.
+Stripping away unused components from the TelosB could help greatly as well
+as integrating solar panels for power support and creating an external
+casing to protect the sensitive electronics from the environment.
 
 \bibliographystyle{abbrv}
 \bibliography{report}
